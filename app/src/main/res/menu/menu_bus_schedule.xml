@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group android:checkableBehavior="single">
+
+        <item android:title="">
+            <menu>
+
+                <item
+                    android:id="@+id/kk1"
+                    android:title="Kolej Kediaman 1" />
+
+                <item
+                    android:id="@+id/kknc"
+                    android:title="Kolej Kediaman Nilam Court" />
+
+                <item
+                    android:id="@+id/kksi"
+                    android:title="Kolej Kediaman Sutera Indah" />
+                <item
+                    android:id="@+id/anggerik"
+                    android:title="Kolej Kediaman Anggerik" />
+                <item
+                    android:id="@+id/acacia"
+                    android:title="Kolej Kediaman Acacia" />
+
+            </menu>
+
+        </item>
+
+    </group>
+
+</menu>

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "271144517008",
+    "project_id": "ibus-87596",
+    "storage_bucket": "ibus-87596.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:271144517008:android:0a35aab1ce60d0838f0715",
+        "android_client_info": {
+          "package_name": "com.shadowcoder.ibus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "271144517008-dht5b5jnehm8jetce0ncblsekjencloa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shadowcoder.ibus",
+            "certificate_hash": "21531285cd16994786fa588000250dcd50f9237b"
+          }
+        },
+        {
+          "client_id": "271144517008-ba2iqnsglvd60dt45tsa79ru5vou56rq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_3YwTzKL0QwlY5CH4vkIvDivR2ZizXZs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "271144517008-ba2iqnsglvd60dt45tsa79ru5vou56rq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
