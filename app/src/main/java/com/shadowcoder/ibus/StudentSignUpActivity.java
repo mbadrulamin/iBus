@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class StudentSignUpActivity extends AppCompatActivity {
 
@@ -31,9 +33,9 @@ public class StudentSignUpActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener firebaseAuthListener;
-    
+
     private DatabaseReference mStudentDatabase;
-    
+
     private ProgressBar spinner;
 
     @Override
@@ -50,7 +52,7 @@ public class StudentSignUpActivity extends AppCompatActivity {
         mSignup = findViewById(R.id.studentSignupButton);
         mBack = findViewById(R.id.studentBackButtonSignup);
 
-        spinner=(ProgressBar)findViewById(R.id.progressBar);
+        spinner = (ProgressBar) findViewById(R.id.progressBar);
         spinner.setVisibility(View.GONE);
 
         mAuth = FirebaseAuth.getInstance();
@@ -61,51 +63,49 @@ public class StudentSignUpActivity extends AppCompatActivity {
             public void onClick(View v) {
                 spinner.setVisibility(View.VISIBLE);
                 //Validate signup info
-                if (!(!validateEmail() | !validatePassword()) | !validateMatricNumber() | !validatePhone() | !validateName()) {
-
-                    final String email = mEmailField.getText().toString();
-                    final String password = mPasswordField.getText().toString();
-                    mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(StudentSignUpActivity.this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-
-                            if (!task.isSuccessful()) {
-                                Toast.makeText(StudentSignUpActivity.this, "Sign Up Error", Toast.LENGTH_SHORT).show();
-                            } else {
-                                user_id = mAuth.getCurrentUser().getUid();
-                                DatabaseReference current_user_db = FirebaseDatabase.getInstance().getReference().child("Users").child("Students").child(user_id);
-                                current_user_db.setValue(true);
-
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        mStudentDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child("Students").child(user_id);
-                                        saveUserInformation();
-
-                                        Intent intent = new Intent(StudentSignUpActivity.this, StudentMainMenuActivity.class);
-                                        startActivity(intent);
-                                        finish();
-                                    }
-                                },2000);
-
-                            }
-                        }
-                    });
+                if (!validateEmail() | !validatePassword() | !validateMatricNumber() | !validatePhone() | !validateName()) {
+                    return;
                 }
 
+                final String email = mEmailField.getText().toString();
+                final String password = mPasswordField.getText().toString();
+                mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(StudentSignUpActivity.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
 
-                return;
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(StudentSignUpActivity.this, "Sign Up Error", Toast.LENGTH_SHORT).show();
+                        } else {
+                            user_id = mAuth.getCurrentUser().getUid();
+                            DatabaseReference current_user_db = FirebaseDatabase.getInstance().getReference().child("Users").child("Students").child(user_id);
+                            current_user_db.setValue(true);
+
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mStudentDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child("Students").child(user_id);
+                                    saveUserInformation();
+
+                                    Intent intent = new Intent(StudentSignUpActivity.this, StudentMainMenuActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            }, 2000);
+
+                        }
+                    }
+                });
             }
         });
 
-        mBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(StudentSignUpActivity.this, StudentLoginActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
+//        mBack.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(StudentSignUpActivity.this, StudentLoginActivity.class);
+//                startActivity(intent);
+//                finish();
+//            }
+//        });
 
     }
 
@@ -127,9 +127,15 @@ public class StudentSignUpActivity extends AppCompatActivity {
 
 
     private Boolean validateEmail() {
-        String val = mEmailField.getText().toString();
-        if (val.isEmpty()) {
+        String emailInput = mEmailField.getText().toString();
+        if (emailInput.isEmpty()) {
             mEmailField.setError("Field cannot be empty");
+            return false;
+        }
+
+        // Matching the input email to a predefined email pattern
+        else if (!Patterns.EMAIL_ADDRESS.matcher(emailInput).matches()) {
+            mEmailField.setError("Please enter a valid email address");
             return false;
         } else {
             mEmailField.setError(null);
@@ -137,10 +143,28 @@ public class StudentSignUpActivity extends AppCompatActivity {
         }
     }
 
+    // defining our own password pattern
+    private static final Pattern PASSWORD_PATTERN =
+            Pattern.compile("^" +
+                    "(?=.*[@#$%^&+=])" +     // at least 1 special character
+                    "(?=\\S+$)" +            // no white spaces
+                    ".{4,}" +                // at least 4 characters
+                    "$");
+
     private Boolean validatePassword() {
-        String val = mPasswordField.getText().toString();
-        if (val.isEmpty()) {
+
+        // if password field is empty
+        // it will display error message "Field can not be empty"
+        String passwordInput = mPasswordField.getText().toString();
+        if (passwordInput.isEmpty()) {
             mPasswordField.setError("Field cannot be empty");
+            return false;
+        }
+
+        // if password does not matches to the pattern
+        // it will display an error message "Password is too weak"
+        else if (!PASSWORD_PATTERN.matcher(passwordInput).matches()) {
+            mPasswordField.setError("Password is too weak");
             return false;
         } else {
             mPasswordField.setError(null);
@@ -181,5 +205,11 @@ public class StudentSignUpActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent_back = new Intent(StudentSignUpActivity.this, StudentLoginActivity.class);
+        startActivity(intent_back);
+        finish();
+    }
 
 }
