@@ -111,7 +111,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordDriver" />
 
-    <Button
+    <!--Button
         android:id="@+id/backToHomeDriver"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -123,7 +123,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordDriver" />
+        app:layout_constraintTop_toBottomOf="@+id/passwordDriver" /-->
 
     <Button
         android:id="@+id/forget_passwordDriver"
@@ -149,7 +149,6 @@
         android:textColor="@color/colorPrimary"
         android:textColorLink="@color/blue"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/backToHomeStudent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.898"
         app:layout_constraintStart_toStartOf="parent"
@@ -164,22 +163,20 @@
         android:text="Don't have an account?"
         android:textColor="?android:textColorPrimary"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/backToHomeStudent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.202"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login"
-        app:layout_constraintVertical_bias="0.52" />
+        app:layout_constraintTop_toBottomOf="@+id/login" />
 
     <ImageView
         android:id="@+id/iconDriverLogin"
         android:layout_width="272dp"
         android:layout_height="111dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/backToHomeDriver"
+        app:layout_constraintTop_toBottomOf="@+id/login"
         app:srcCompat="@drawable/ibus_logo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

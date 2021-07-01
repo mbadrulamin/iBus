@@ -4,10 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -24,8 +26,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class StudentLoginActivity extends AppCompatActivity {
 
-    private EditText mEmail, mPassword;
-    private Button mLogin, mbackToHome, mRegister, mForgetPassword;
+    private EditText mEmail, mPassword, resetPass;
+    private Button mLogin, mbackToHome, mRegister, mForgetPassword ,cancelDialog , resetPassDialog;
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener firebaseAuthListener;
@@ -58,7 +60,7 @@ public class StudentLoginActivity extends AppCompatActivity {
         mPassword = (EditText) findViewById(R.id.passwordDriver);
         mLogin = (Button) findViewById(R.id.login);
         mRegister = findViewById(R.id.register);
-        mbackToHome = findViewById(R.id.backToHomeStudent);
+        //mbackToHome = findViewById(R.id.backToHomeStudent);
         mForgetPassword = (Button) findViewById(R.id.forget_passwordStudent);
 
 
@@ -117,19 +119,23 @@ public class StudentLoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                final EditText email = new EditText(v.getContext());
+                final Dialog dialog = new Dialog(StudentLoginActivity.this);
+                //We have added a title in the custom layout. So let's disable the default title.
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                //The user will be able to cancel the dialog bu clicking anywhere outside the dialog.
+                dialog.setCancelable(true);
+                //Mention the name of the layout of your custom dialog.
+                dialog.setContentView(R.layout.forget_password);
 
-                final AlertDialog.Builder passwordResetDialog = new AlertDialog.Builder(v.getContext());
-                passwordResetDialog.setTitle("Reset Password");
-                passwordResetDialog.setMessage("Enter your email address.");
-                passwordResetDialog.setView(email);
+                //Initializing the views of the dialog.
+                resetPass = dialog.findViewById(R.id.editTextResetPassword);
+                resetPassDialog = dialog.findViewById(R.id.resetButton);
 
-                passwordResetDialog.setPositiveButton("Reset", new DialogInterface.OnClickListener() {
+                resetPassDialog.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
+                    public void onClick(View v) {
                         //get email and send reset link
-                        String userEmail = email.getText().toString();
+                        String userEmail = resetPass.getText().toString();
                         mAuth.sendPasswordResetEmail(userEmail).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
@@ -141,17 +147,10 @@ public class StudentLoginActivity extends AppCompatActivity {
                                 Toast.makeText(getApplication(), "Failed! Please try again", Toast.LENGTH_LONG).show();
                             }
                         });
+                        dialog.dismiss();
                     }
                 });
-
-                passwordResetDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //close
-                    }
-                });
-
-                passwordResetDialog.create().show();
+                dialog.show();
 
             }
         });

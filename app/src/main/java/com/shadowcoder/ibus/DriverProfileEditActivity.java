@@ -207,14 +207,14 @@ public class DriverProfileEditActivity extends AppCompatActivity {
     }
 
     //Pass password to this class/print to certain text view
-    private void populateInfoTv(String name, String age, Boolean hasAcceptedTerms) {
+    //private void populateInfoTv(String name, String age, Boolean hasAcceptedTerms) {
         //infoTv.setVisibility(View.VISIBLE);
         //String acceptedText = "have";
         //if(!hasAcceptedTerms) {
         //acceptedText = "have not";
         //}
         //infoTv.setText(String.format(getString(R.string.info), name, age, acceptedText));
-    }
+    //}
 
     private void getUserInfo(){
         mDriverDatabase.addValueEventListener(new ValueEventListener() {
