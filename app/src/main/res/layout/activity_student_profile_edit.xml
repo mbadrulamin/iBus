@@ -226,6 +226,18 @@
                 app:layout_constraintBottom_toTopOf="@+id/studentPhoneProfile"
                 app:layout_constraintStart_toStartOf="@+id/studentPhoneProfile" />
 
+            <Button
+                android:id="@+id/studentChangePassword"
+                android:layout_width="233dp"
+                android:layout_height="46dp"
+                android:text="Change Password"
+                app:layout_constraintBottom_toBottomOf="@+id/studentMatricNoProfile"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.82"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.757" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>

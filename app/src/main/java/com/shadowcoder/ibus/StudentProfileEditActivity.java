@@ -1,14 +1,18 @@
 package com.shadowcoder.ibus;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,7 +44,7 @@ public class StudentProfileEditActivity extends AppCompatActivity {
 
     private EditText mNameField, mPhoneField, mMatricNoField, mEmailField, mPasswordField;
 
-    private Button mBack, mConfirm;
+    private Button mBack, mConfirm, mChangePass;
 
     private ImageView mProfileImage;
 
@@ -51,6 +55,7 @@ public class StudentProfileEditActivity extends AppCompatActivity {
     private String mPhone;
     private String mMatricNo;
     private String mProfileImageUrl;
+    private FirebaseUser user;
 
     private Uri resultUri;
 
@@ -60,6 +65,7 @@ public class StudentProfileEditActivity extends AppCompatActivity {
         setContentView(R.layout.activity_student_profile_edit);
 
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
         mNameField = findViewById(R.id.studentNameProfile);
         mPhoneField = findViewById(R.id.studentPhoneProfile);
@@ -69,6 +75,7 @@ public class StudentProfileEditActivity extends AppCompatActivity {
 
         mBack = findViewById(R.id.studentBackButtonProfile);
         mConfirm = findViewById(R.id.studentConfirmButtonProfile);
+        mChangePass = findViewById(R.id.studentChangePassword);
 
         mProfileImage = (ImageView) findViewById(R.id.studentImageProfile);
 
@@ -117,6 +124,17 @@ public class StudentProfileEditActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
                 return;
+            }
+        });
+
+
+        mChangePass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+
+
             }
         });
 

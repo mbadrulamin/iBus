@@ -391,10 +391,6 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
     };
 
 
-
-
-
-
     @Override
     protected void onStop() {
         super.onStop();
