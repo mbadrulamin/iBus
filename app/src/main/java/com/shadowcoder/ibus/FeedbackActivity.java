@@ -12,11 +12,17 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class FeedbackActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -24,6 +30,8 @@ public class FeedbackActivity extends AppCompatActivity implements NavigationVie
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private Toolbar toolbar;
+    private TextView mName, mEmail, mFeedback;
+    private DatabaseReference mFeedBackDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +42,10 @@ public class FeedbackActivity extends AppCompatActivity implements NavigationVie
         navigationView = findViewById(R.id.nav_viewHome);
         toolbar = findViewById(R.id.toolbar_home);
         mButton = findViewById(R.id.submitButton);
+
+        mName = findViewById(R.id.nameFeedback);
+        mEmail = findViewById(R.id.emailFeedback);
+        mFeedback = findViewById(R.id.opinionFeedback);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(null); //Make the title gone
@@ -48,6 +60,7 @@ public class FeedbackActivity extends AppCompatActivity implements NavigationVie
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                saveUserFeedBack();
                 Intent intent = new Intent(FeedbackActivity.this, HomeActivity.class);
                 startActivity(intent);
                 finish();
@@ -56,6 +69,23 @@ public class FeedbackActivity extends AppCompatActivity implements NavigationVie
         });
 
     }
+
+
+    private void saveUserFeedBack(){
+
+        String email = mEmail.getText().toString();
+        String name = mName.getText().toString();
+        String feedback = mFeedback.getText().toString();
+        mFeedBackDatabase = FirebaseDatabase.getInstance().getReference().child("Feedback").child(email);
+
+        Map userFeedback = new HashMap();
+        userFeedback.put("name", name);
+        userFeedback.put("feedback", feedback);
+        mFeedBackDatabase.updateChildren(userFeedback);
+        finish();
+
+    }
+
 
     @Override
     public void onBackPressed() {
