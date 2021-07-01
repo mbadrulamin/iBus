@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -71,7 +72,6 @@ public class StudentProfileEditActivity extends AppCompatActivity {
         mPhoneField = findViewById(R.id.studentPhoneProfile);
         mMatricNoField = findViewById(R.id.studentMatricNoProfile);
         mEmailField = findViewById(R.id.studentEmailProfile);
-        mPasswordField = findViewById(R.id.studentPasswordProfile);
 
         mBack = findViewById(R.id.studentBackButtonProfile);
         mConfirm = findViewById(R.id.studentConfirmButtonProfile);
@@ -132,13 +132,52 @@ public class StudentProfileEditActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
-
+                showUpdatePasswordDialog();
 
             }
         });
 
 
+    }
+
+    private void showUpdatePasswordDialog() {
+        final Dialog dialog = new Dialog(StudentProfileEditActivity.this);
+        //We have added a title in the custom layout. So let's disable the default title.
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //The user will be able to cancel the dialog bu clicking anywhere outside the dialog.
+        dialog.setCancelable(true);
+        //Mention the name of the layout of your custom dialog.
+        dialog.setContentView(R.layout.dialog_update_password);
+
+        //Initializing the views of the dialog.
+        final EditText enterPassword = dialog.findViewById(R.id.enterPasswordET);
+        final EditText confirmPassword = dialog.findViewById(R.id.confirmPasswordET);
+
+        Button updatePass = dialog.findViewById(R.id.updatePasswordButton);
+
+
+        updatePass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name = enterPassword.getText().toString();
+                String age = confirmPassword.getText().toString();
+                //Boolean hasAccepted = termsCb.isChecked();
+                //populateInfoTv(name,age,hasAccepted);
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+    //Pass password to this class/print to certain text view
+    private void populateInfoTv(String name, String age, Boolean hasAcceptedTerms) {
+        //infoTv.setVisibility(View.VISIBLE);
+        //String acceptedText = "have";
+        //if(!hasAcceptedTerms) {
+            //acceptedText = "have not";
+        //}
+        //infoTv.setText(String.format(getString(R.string.info), name, age, acceptedText));
     }
 
     private void getUserInfo(){

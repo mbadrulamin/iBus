@@ -134,27 +134,11 @@
                 app:layout_constraintTop_toBottomOf="@+id/studentNameProfile" />
 
             <EditText
-                android:id="@+id/studentPasswordProfile"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="64dp"
-                android:layout_marginEnd="32dp"
-                android:background="@drawable/round_border"
-                android:ems="10"
-                android:hint="Password"
-                android:inputType="textPassword"
-                android:padding="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/studentEmailProfile" />
-
-            <EditText
                 android:id="@+id/studentMatricNoProfile"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="32dp"
-                android:layout_marginTop="64dp"
+                android:layout_marginTop="128dp"
                 android:layout_marginEnd="32dp"
                 android:background="@drawable/round_border"
                 android:ems="10"
@@ -163,7 +147,7 @@
                 android:padding="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/studentPasswordProfile" />
+                app:layout_constraintTop_toBottomOf="@+id/textView28" />
 
             <TextView
                 android:id="@+id/textView6"
@@ -194,13 +178,14 @@
                 android:id="@+id/textView10"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
                 android:paddingStart="16dp"
                 android:text="Password"
                 android:textColor="?android:textColorPrimary"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/studentPasswordProfile"
-                app:layout_constraintStart_toStartOf="@+id/studentPasswordProfile" />
+                app:layout_constraintStart_toStartOf="@+id/textView9"
+                app:layout_constraintTop_toBottomOf="@+id/studentEmailProfile" />
 
             <TextView
                 android:id="@+id/textView11"
@@ -228,15 +213,30 @@
 
             <Button
                 android:id="@+id/studentChangePassword"
-                android:layout_width="233dp"
-                android:layout_height="46dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:background="@drawable/round_shape"
                 android:text="Change Password"
+                android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="@+id/studentMatricNoProfile"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.82"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.757" />
+                app:layout_constraintTop_toBottomOf="@+id/studentEmailProfile" />
+
+            <TextView
+                android:id="@+id/textView28"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="To change password, please click button below"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/textView10"
+                app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -299,10 +299,6 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
         mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
 
 
-
-
-
-
         //ADD MARKED LOCATION IN MAPS
 
         //For position of mark location
@@ -323,7 +319,6 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
 
         //Hostel
         mMap.addMarker(new MarkerOptions().position(kk1).title("Kolej Kediaman 1")
-                //This below line is for custom marker (Code connect with above line)
             .icon(BitmapFromVector(getApplicationContext(), R.drawable.ic_mark_hostel)));
         mMap.addMarker(new MarkerOptions().position(kk_acacia).title("Kolej Kediaman Acacia Avenue")
                 .icon(BitmapFromVector(getApplicationContext(), R.drawable.ic_mark_hostel)));
