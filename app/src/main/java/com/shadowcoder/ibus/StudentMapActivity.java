@@ -217,7 +217,12 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
     public boolean onMarkerClick(Marker marker) {
 
         //Retrieve the data from the marker.
-        getDriverInfo((String) marker.getTag());
+        try {
+            getDriverInfo((String) marker.getTag());
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Not click on bus icon");
+        }
 
 
         return false;

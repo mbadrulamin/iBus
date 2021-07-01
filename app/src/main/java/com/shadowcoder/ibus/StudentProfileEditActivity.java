@@ -21,9 +21,12 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -35,15 +38,17 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class StudentProfileEditActivity extends AppCompatActivity {
 
-
-    private EditText mNameField, mPhoneField, mMatricNoField, mEmailField, mPasswordField;
+    private EditText mNameField, mPhoneField, mMatricNoField, mEmailField, enterPassword, confirmPassword, oldPassword;
 
     private Button mBack, mConfirm, mChangePass;
 
@@ -51,14 +56,10 @@ public class StudentProfileEditActivity extends AppCompatActivity {
 
     private DatabaseReference mStudentDatabase;
 
-    private String userId;
-    private String mName;
-    private String mPhone;
-    private String mMatricNo;
-    private String mProfileImageUrl;
-    private FirebaseUser user;
+    private String userId, mName, mPhone, mMatricNo, mProfileImageUrl;
 
     private Uri resultUri;
+    private FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,19 +151,52 @@ public class StudentProfileEditActivity extends AppCompatActivity {
         dialog.setContentView(R.layout.dialog_update_password);
 
         //Initializing the views of the dialog.
-        final EditText enterPassword = dialog.findViewById(R.id.enterPasswordET);
-        final EditText confirmPassword = dialog.findViewById(R.id.confirmPasswordET);
+        enterPassword = dialog.findViewById(R.id.enterPasswordET);
+        confirmPassword = dialog.findViewById(R.id.confirmPasswordET);
+        oldPassword = dialog.findViewById(R.id.oldPasswordET);
+
 
         Button updatePass = dialog.findViewById(R.id.updatePasswordButton);
-
 
         updatePass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name = enterPassword.getText().toString();
-                String age = confirmPassword.getText().toString();
+
+                String pass = enterPassword.getText().toString();
+                String confirmPass = confirmPassword.getText().toString();
+                String oldPass = oldPassword.getText().toString();
+                String currentUserEmail = user.getEmail();
+
+                if (!validatePassword()){
+                    return;
+                }
+                //Reauthenticate current user before changing password
+                AuthCredential credential = EmailAuthProvider.getCredential(currentUserEmail, oldPass);
+                user.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull @NotNull Task<Void> task) {
+                        Toast.makeText(getApplication(), "Authentication Successful", Toast.LENGTH_SHORT).show();
+                        user.updatePassword(pass).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Toast.makeText(getApplication(), "Password Change Successfully", Toast.LENGTH_LONG).show();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull @NotNull Exception e) {
+                                Toast.makeText(getApplication(), "Password Change Failed", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull @NotNull Exception e) {
+                        Toast.makeText(getApplication(), "Authentication Failed", Toast.LENGTH_SHORT).show();
+                    }
+                });
                 //Boolean hasAccepted = termsCb.isChecked();
                 //populateInfoTv(name,age,hasAccepted);
+
                 dialog.dismiss();
             }
         });
@@ -316,6 +350,45 @@ public class StudentProfileEditActivity extends AppCompatActivity {
         } else {
             mPhoneField.setError(null);
             return true;
+        }
+    }
+
+    // defining our own password pattern
+    private static final Pattern PASSWORD_PATTERN =
+            Pattern.compile("^" +
+                    "(?=.*[@#$%^&+=])" +     // at least 1 special character
+                    "(?=\\S+$)" +            // no white spaces
+                    ".{4,}" +                // at least 4 characters
+                    "$");
+
+    private Boolean validatePassword() {
+
+        // if password field is empty
+        // it will display error message "Field can not be empty"
+        String pass = enterPassword.getText().toString().trim();
+        String confirmPass = confirmPassword.getText().toString().trim();
+        if (pass.isEmpty() | confirmPass.isEmpty()) {
+            enterPassword.setError("Field cannot be empty");
+            confirmPassword.setError("Field cannot be empty");
+            return false;
+        }
+
+        // if password does not matches to the pattern
+        // it will display an error message "Password is too weak"
+        else if (!PASSWORD_PATTERN.matcher(confirmPass).matches()) {
+            enterPassword.setError("Password is too weak");
+            confirmPassword.setError("Password is too weak");
+            return false;
+        }
+        else if (pass.equals(confirmPass)){
+            enterPassword.setError(null);
+            confirmPassword.setError(null);
+            return true;
+
+        }
+        else {
+            Toast.makeText(getApplication(), "Password not match", Toast.LENGTH_LONG).show();
+            return false;
         }
     }
 
