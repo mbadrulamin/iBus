@@ -61,7 +61,7 @@ public class StudentSignUpActivity extends AppCompatActivity {
         mSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                spinner.setVisibility(View.VISIBLE);
+
                 //Validate signup info
                 if (!validateEmail() | !validatePassword() | !validateMatricNumber() | !validatePhone() | !validateName()) {
                     return;
@@ -76,6 +76,7 @@ public class StudentSignUpActivity extends AppCompatActivity {
                         if (!task.isSuccessful()) {
                             Toast.makeText(StudentSignUpActivity.this, "Sign Up Error", Toast.LENGTH_SHORT).show();
                         } else {
+                            spinner.setVisibility(View.VISIBLE);
                             user_id = mAuth.getCurrentUser().getUid();
                             DatabaseReference current_user_db = FirebaseDatabase.getInstance().getReference().child("Users").child("Students").child(user_id);
                             current_user_db.setValue(true);

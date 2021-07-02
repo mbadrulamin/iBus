@@ -62,7 +62,7 @@ public class DriverSignUpActivity extends AppCompatActivity {
         mSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                spinner.setVisibility(View.VISIBLE);
+
                 //Validate signup info
                 if (!(!validateEmail() | !validatePassword()) | !validateStaffId() | !validatePhone() | !validateName() | !validateBusRegistrationNumber()) {
 
@@ -78,6 +78,7 @@ public class DriverSignUpActivity extends AppCompatActivity {
                             if (!task.isSuccessful()) {
                                 Toast.makeText(DriverSignUpActivity.this, "Sign Up Error", Toast.LENGTH_SHORT).show();
                             } else {
+                                spinner.setVisibility(View.VISIBLE);
                                 user_id = mAuth.getCurrentUser().getUid();
                                 DatabaseReference current_user_db = FirebaseDatabase.getInstance().getReference().child("Users").child("Drivers").child(user_id);
                                 current_user_db.setValue(true);
