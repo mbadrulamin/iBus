@@ -64,7 +64,7 @@ public class DriverSignUpActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 //Validate signup info
-                if (!(!validateEmail() | !validatePassword()) | !validateStaffId() | !validatePhone() | !validateName() | !validateBusRegistrationNumber()) {
+                if (!validateEmail() | !validatePassword() | !validateStaffId() | !validatePhone() | !validateName() | !validateBusRegistrationNumber()) {
 
                     return;
                 }

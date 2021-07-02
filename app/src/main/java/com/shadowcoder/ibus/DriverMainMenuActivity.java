@@ -1,8 +1,5 @@
 package com.shadowcoder.ibus;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,7 +8,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -28,7 +27,7 @@ public class DriverMainMenuActivity extends AppCompatActivity {
     private String userId, mName;
     private TextView nameDriver;
 
-    private Button busRealTime, profileStudent ,logout, route;
+    private Button busRealTime, profileStudent, logout, route;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +43,6 @@ public class DriverMainMenuActivity extends AppCompatActivity {
         route = findViewById(R.id.route_Driver);
 
         mDriverDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child("Drivers").child(userId);
-
         getUserInfo();
 
         busRealTime.setOnClickListener(new View.OnClickListener() {
@@ -59,7 +57,7 @@ public class DriverMainMenuActivity extends AppCompatActivity {
         profileStudent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DriverMainMenuActivity.this,DriverProfileActivity.class);
+                Intent intent = new Intent(DriverMainMenuActivity.this, DriverProfileActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -80,20 +78,20 @@ public class DriverMainMenuActivity extends AppCompatActivity {
         route.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DriverMainMenuActivity.this,RouteEditActivity.class);
+                Intent intent = new Intent(DriverMainMenuActivity.this, RouteEditActivity.class);
                 startActivity(intent);
                 finish();
             }
         });
     }
 
-    private void getUserInfo(){
+    private void getUserInfo() {
         mDriverDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists() && snapshot.getChildrenCount() > 0){
+                if (snapshot.exists() && snapshot.getChildrenCount() > 0) {
                     Map<String, Object> map = (Map<String, Object>) snapshot.getValue();
-                    if (map.get("name") != null){
+                    if (map.get("name") != null) {
                         mName = map.get("name").toString();
                         nameDriver.setText(mName);
                     }
@@ -127,7 +125,7 @@ public class DriverMainMenuActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent_back = new Intent(DriverMainMenuActivity.this,HomeActivity.class);
+        Intent intent_back = new Intent(DriverMainMenuActivity.this, HomeActivity.class);
         startActivity(intent_back);
         finish();
     }

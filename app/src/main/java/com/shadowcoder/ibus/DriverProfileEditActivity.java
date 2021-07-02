@@ -53,7 +53,7 @@ public class DriverProfileEditActivity extends AppCompatActivity {
 
     private EditText mNameField, mPhoneField, mStaffIdField, mEmailField, mBusRegistrationNoField, enterPassword, confirmPassword, oldPassword;
 
-    private Button mBack, mConfirm;
+    private Button mBack, mConfirm, mGetImage;
 
     private TextView UpdatePass;
 
@@ -85,13 +85,13 @@ public class DriverProfileEditActivity extends AppCompatActivity {
         mConfirm = findViewById(R.id.driverConfirmButtonProfile);
 
         mProfileImage = (ImageView) findViewById(R.id.driverImageProfile);
-
+        mGetImage = findViewById(R.id.getImageDriver);
 
         mDriverDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child("Drivers").child(userId);
 
         getUserInfo();
 
-        mProfileImage.setOnClickListener(new View.OnClickListener() {
+        mGetImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -107,6 +107,23 @@ public class DriverProfileEditActivity extends AppCompatActivity {
                 startActivityForResult(chooserIntent, 1);
             }
         });
+
+//        mProfileImage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+//                getIntent.setType("image/*");
+//
+//
+//                Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                pickIntent.setType("image/*");
+//
+//                Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+//                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
+//
+//                startActivityForResult(chooserIntent, 1);
+//            }
+//        });
 
         mConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -329,8 +346,6 @@ public class DriverProfileEditActivity extends AppCompatActivity {
         }else{
             finish();
         }
-
-        finish();
 
     }
 

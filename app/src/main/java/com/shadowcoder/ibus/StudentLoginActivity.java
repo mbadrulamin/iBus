@@ -61,14 +61,14 @@ public class StudentLoginActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                             if (snapshot.exists()){
-                                Toast.makeText(StudentLoginActivity.this, "LOGIN SUCCESSFUL", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(StudentLoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(StudentLoginActivity.this, StudentMainMenuActivity.class);
                                 startActivity(intent);
                                 finish();
                                 return;
                             }
                             else{
-                                Toast.makeText(StudentLoginActivity.this, "ARE YOU A DRIVER? LOGIN", Toast.LENGTH_LONG).show();
+                                Toast.makeText(StudentLoginActivity.this, "Are you a student? Login", Toast.LENGTH_LONG).show();
                             }
                         }
 

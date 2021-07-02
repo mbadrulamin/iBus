@@ -59,14 +59,14 @@ public class DriverLoginActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                             if (snapshot.exists()){
-                                Toast.makeText(DriverLoginActivity.this, "LOGIN SUCCESSFUL", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(DriverLoginActivity.this, StudentMainMenuActivity.class);
+                                Toast.makeText(DriverLoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(DriverLoginActivity.this, DriverMainMenuActivity.class);
                                 startActivity(intent);
                                 finish();
                                 return;
                             }
                             else{
-                                Toast.makeText(DriverLoginActivity.this, "ARE YOU A STUDENT? LOGIN", Toast.LENGTH_LONG).show();
+                                Toast.makeText(DriverLoginActivity.this, "Are you a driver? Login", Toast.LENGTH_LONG).show();
                             }
                         }
 
@@ -75,6 +75,7 @@ public class DriverLoginActivity extends AppCompatActivity {
 
                         }
                     });
+
                 }
             }
         };
