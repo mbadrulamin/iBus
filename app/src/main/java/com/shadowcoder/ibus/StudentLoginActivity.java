@@ -22,8 +22,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Map;
 
 public class StudentLoginActivity extends AppCompatActivity {
 
@@ -42,18 +49,34 @@ public class StudentLoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_student_login);
 
         mAuth = FirebaseAuth.getInstance();
-
         firebaseAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
 
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                DatabaseReference mStudentDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child("Students");
 
-                if (user != null) {
-                    Intent intent = new Intent(StudentLoginActivity.this, StudentMainMenuActivity.class);
-                    startActivity(intent);
-                    finish();
-                    return;
+                if (user != null){
+                    mStudentDatabase.child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                            if (snapshot.exists()){
+                                Toast.makeText(StudentLoginActivity.this, "LOGIN SUCCESSFUL", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(StudentLoginActivity.this, StudentMainMenuActivity.class);
+                                startActivity(intent);
+                                finish();
+                                return;
+                            }
+                            else{
+                                Toast.makeText(StudentLoginActivity.this, "ARE YOU A DRIVER? LOGIN", Toast.LENGTH_LONG).show();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+                        }
+                    });
                 }
             }
         };
