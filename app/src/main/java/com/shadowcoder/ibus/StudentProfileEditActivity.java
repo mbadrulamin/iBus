@@ -18,6 +18,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -50,7 +51,9 @@ public class StudentProfileEditActivity extends AppCompatActivity {
 
     private EditText mNameField, mPhoneField, mMatricNoField, mEmailField, enterPassword, confirmPassword, oldPassword;
 
-    private Button mBack, mConfirm, mChangePass;
+    private Button mBack, mConfirm;
+
+    private TextView mChangePass;
 
     private ImageView mProfileImage;
 
@@ -74,7 +77,7 @@ public class StudentProfileEditActivity extends AppCompatActivity {
         mMatricNoField = findViewById(R.id.studentMatricNoProfile);
         mEmailField = findViewById(R.id.studentEmailProfile);
 
-        mBack = findViewById(R.id.studentBackButtonProfile);
+        //mBack = findViewById(R.id.studentBackButtonProfile);
         mConfirm = findViewById(R.id.studentConfirmButtonProfile);
         mChangePass = findViewById(R.id.studentChangePassword);
 
@@ -118,7 +121,7 @@ public class StudentProfileEditActivity extends AppCompatActivity {
             }
         });
 
-        mBack.setOnClickListener(new View.OnClickListener() {
+        /*mBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(StudentProfileEditActivity.this, StudentProfileActivity.class);
@@ -126,15 +129,13 @@ public class StudentProfileEditActivity extends AppCompatActivity {
                 finish();
                 return;
             }
-        });
+        });*/
 
 
         mChangePass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 showUpdatePasswordDialog();
-
             }
         });
 

@@ -50,7 +50,7 @@ public class StudentSignUpActivity extends AppCompatActivity {
         mMatricNoField = findViewById(R.id.studentMatricNoSignup);
         mPhoneField = findViewById(R.id.studentPhoneSignup);
         mSignup = findViewById(R.id.studentSignupButton);
-        mBack = findViewById(R.id.studentBackButtonSignup);
+        //mBack = findViewById(R.id.studentBackButtonSignup);
 
         spinner = (ProgressBar) findViewById(R.id.progressBar);
         spinner.setVisibility(View.GONE);

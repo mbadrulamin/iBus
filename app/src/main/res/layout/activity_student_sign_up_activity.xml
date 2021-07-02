@@ -79,13 +79,15 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
+        android:layout_marginBottom="24dp"
         android:background="@drawable/round_shape"
         android:text="SIGN UP"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/studentPhoneSignup" />
 
-    <Button
+    <!--Button
         android:id="@+id/studentBackButtonSignup"
         android:layout_width="48dp"
         android:layout_height="48dp"
@@ -94,7 +96,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/studentSignupButton" />
+        app:layout_constraintTop_toBottomOf="@+id/studentSignupButton" /-->
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -151,5 +153,18 @@
         android:padding="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView30" />
+
+    <TextView
+        android:id="@+id/textView30"
+        android:layout_width="253dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Note : Password must at least 4 characters and a symbol with no space"
+        android:textColor="?android:textColorPrimary"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/studentPasswordSignup"
         app:layout_constraintTop_toBottomOf="@+id/studentPasswordSignup" />
 </androidx.constraintlayout.widget.ConstraintLayout>

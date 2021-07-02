@@ -20,6 +20,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -52,7 +53,9 @@ public class DriverProfileEditActivity extends AppCompatActivity {
 
     private EditText mNameField, mPhoneField, mStaffIdField, mEmailField, mBusRegistrationNoField, enterPassword, confirmPassword, oldPassword;
 
-    private Button mBack, mConfirm, UpdatePass;
+    private Button mBack, mConfirm;
+
+    private TextView UpdatePass;
 
     private ImageView mProfileImage;
 
@@ -75,10 +78,10 @@ public class DriverProfileEditActivity extends AppCompatActivity {
         mPhoneField = findViewById(R.id.driverPhoneProfile);
         mStaffIdField = findViewById(R.id.driverStaffIdProfile);
         mEmailField = findViewById(R.id.driverEmailProfile);
-        UpdatePass = findViewById(R.id.updateDriverPassButton);
+        UpdatePass = findViewById(R.id.updateDriverPass);
         mBusRegistrationNoField = findViewById(R.id.driverBusRegistrationProfile);
 
-        mBack = findViewById(R.id.driverBackButtonProfile);
+        //mBack = findViewById(R.id.driverBackButtonProfile);
         mConfirm = findViewById(R.id.driverConfirmButtonProfile);
 
         mProfileImage = (ImageView) findViewById(R.id.driverImageProfile);
@@ -123,7 +126,7 @@ public class DriverProfileEditActivity extends AppCompatActivity {
             }
         });
 
-        mBack.setOnClickListener(new View.OnClickListener() {
+        /*mBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(DriverProfileEditActivity.this, DriverProfileActivity.class);
@@ -131,7 +134,7 @@ public class DriverProfileEditActivity extends AppCompatActivity {
                 finish();
                 return;
             }
-        });
+        });*/
 
         UpdatePass.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -97,8 +97,10 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
+        android:layout_marginBottom="24dp"
         android:background="@drawable/round_shape"
         android:text="SIGN UP"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/driverBusRegistrationSignup" />
@@ -114,7 +116,7 @@
         app:layout_constraintStart_toEndOf="@+id/driverSignupButton"
         app:layout_constraintTop_toTopOf="@+id/driverSignupButton" />
 
-    <Button
+    <!--Button
         android:id="@+id/driverBackButtonSignup"
         android:layout_width="48dp"
         android:layout_height="48dp"
@@ -123,7 +125,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/driverSignupButton" />
+        app:layout_constraintTop_toBottomOf="@+id/driverSignupButton" /-->
 
     <EditText
         android:id="@+id/driverEmailSignup"
@@ -171,6 +173,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView32" />
+
+    <TextView
+        android:id="@+id/textView32"
+        android:layout_width="253dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Note : Password must at least 4 characters and a symbol with no space"
+        android:textColor="?android:textColorPrimary"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/driverPasswordSignup"
         app:layout_constraintTop_toBottomOf="@+id/driverPasswordSignup" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

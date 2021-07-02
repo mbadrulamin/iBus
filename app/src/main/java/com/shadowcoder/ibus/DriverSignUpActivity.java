@@ -50,7 +50,7 @@ public class DriverSignUpActivity extends AppCompatActivity {
         mStaffIdField = findViewById(R.id.driverStaffIdSignup);
         mPhoneField = findViewById(R.id.driverPhoneSignup);
         mSignup = findViewById(R.id.driverSignupButton);
-        mBack = findViewById(R.id.driverBackButtonSignup);
+        //mBack = findViewById(R.id.driverBackButtonSignup);
         mBusRegistrationNumberField = findViewById(R.id.driverBusRegistrationSignup);
 
         spinner=(ProgressBar)findViewById(R.id.progressBar);

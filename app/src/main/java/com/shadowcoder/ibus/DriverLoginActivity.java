@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -29,7 +30,9 @@ import org.jetbrains.annotations.NotNull;
 public class DriverLoginActivity extends AppCompatActivity {
 
     private EditText mEmail, mPassword, resetPass;
-    private Button mLogin, mRegister, mbackToHome, mForgetPassword ,resetPassDialog;
+    private Button mLogin, mbackToHome ,resetPassDialog;
+
+    private TextView mRegister, mForgetPassword;
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener firebaseAuthListener;
@@ -60,9 +63,9 @@ public class DriverLoginActivity extends AppCompatActivity {
         mEmail = (EditText) findViewById(R.id.emailDriver);
         mPassword = (EditText) findViewById(R.id.passwordDriver);
         mLogin = (Button) findViewById(R.id.login);
-        mRegister = (Button) findViewById(R.id.register);
+        mRegister = findViewById(R.id.register);
         //mbackToHome = findViewById(R.id.backToHomeDriver);
-        mForgetPassword = (Button) findViewById(R.id.forget_passwordDriver);
+        mForgetPassword = findViewById(R.id.forget_passwordDriver);
 
         mRegister.setOnClickListener(new View.OnClickListener() {
             @Override

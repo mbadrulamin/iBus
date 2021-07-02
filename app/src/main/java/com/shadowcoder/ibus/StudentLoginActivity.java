@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,7 +28,9 @@ import org.jetbrains.annotations.NotNull;
 public class StudentLoginActivity extends AppCompatActivity {
 
     private EditText mEmail, mPassword, resetPass;
-    private Button mLogin, mbackToHome, mRegister, mForgetPassword ,cancelDialog , resetPassDialog;
+    private Button mLogin, mbackToHome,cancelDialog , resetPassDialog;
+
+    private TextView mForgetPassword, mRegister;
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener firebaseAuthListener;
@@ -61,7 +64,7 @@ public class StudentLoginActivity extends AppCompatActivity {
         mLogin = (Button) findViewById(R.id.login);
         mRegister = findViewById(R.id.register);
         //mbackToHome = findViewById(R.id.backToHomeStudent);
-        mForgetPassword = (Button) findViewById(R.id.forget_passwordStudent);
+        mForgetPassword = findViewById(R.id.forget_passwordStudent);
 
 
         mRegister.setOnClickListener(new View.OnClickListener() {
