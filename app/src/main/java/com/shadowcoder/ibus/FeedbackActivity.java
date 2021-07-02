@@ -76,10 +76,10 @@ public class FeedbackActivity extends AppCompatActivity implements NavigationVie
         String email = mEmail.getText().toString();
         String name = mName.getText().toString();
         String feedback = mFeedback.getText().toString();
-        mFeedBackDatabase = FirebaseDatabase.getInstance().getReference().child("Feedback").child(email);
+        mFeedBackDatabase = FirebaseDatabase.getInstance().getReference().child("Feedback").child(name);
 
         Map userFeedback = new HashMap();
-        userFeedback.put("name", name);
+        userFeedback.put("email", email);
         userFeedback.put("feedback", feedback);
         mFeedBackDatabase.updateChildren(userFeedback);
         finish();
