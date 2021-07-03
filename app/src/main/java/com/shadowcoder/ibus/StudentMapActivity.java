@@ -19,6 +19,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,6 +59,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -74,7 +76,6 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
     private FusedLocationProviderClient mFusedLocationClient;
 
     private SupportMapFragment mapFragment;
-
 
     private Marker mDriverMarker;
 
@@ -99,7 +100,6 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
 
 
         mBackButton = findViewById(R.id.backButtonStudent);
-        mDriverDistance = findViewById(R.id.driverDistance);
 
 
         mBackButton.setOnClickListener(new View.OnClickListener() {
@@ -218,7 +218,7 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
     private void getDriverInfo(String driverFoundID){
 
         DatabaseReference mDriverDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child("Drivers").child(driverFoundID);
-        DatabaseReference driverLocationRef = FirebaseDatabase.getInstance().getReference().child("driversAvailable").child(driverFoundID).child("l");
+
 
         bottomSheetDialog = new BottomSheetDialog(StudentMapActivity.this,R.style.BottomSheetTheme);
         View sheetView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.fragment_bottom_sheet, (ViewGroup) findViewById(R.id.bottomSheetContainerStudent));
@@ -227,35 +227,9 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
         PlateDriver = sheetView.findViewById(R.id.plate_bus_driver);
         RouteDriver = sheetView.findViewById(R.id.route_bus_driver);
         PhoneDriver = sheetView.findViewById(R.id.phone_bus_driver);
+        mDriverDistance = sheetView.findViewById(R.id.driverDistance);
 
-        driverLocationRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()){
-                    List<Object> map = (List<Object>) dataSnapshot.getValue();
-                    double locationLat = 0;
-                    double locationLng = 0;
-                    if (map.get(0) != null){
-                        locationLat = Double.parseDouble(map.get(0).toString());
-                    }
-                    if (map.get(1) != null){
-                        locationLng = Double.parseDouble(map.get(0).toString());
-                    }
-                    Location driverLocation = new Location("");
-                    driverLocation.setLatitude(locationLat);
-                    driverLocation.setLongitude(locationLng);
-
-                    float distance = mLastLocation.distanceTo(driverLocation);
-
-                    mDriverDistance.setText("Distance: " + distance);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-            }
-        });
+        getDriverLocation(driverFoundID);
 
         mDriverDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -292,6 +266,48 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
         bottomSheetDialog.setContentView(sheetView);
         bottomSheetDialog.show();
     }
+
+    private void getDriverLocation(String driverFoundID){
+        DatabaseReference driverLocationRef = FirebaseDatabase.getInstance().getReference().child("driversAvailable").child(driverFoundID).child("l");
+        driverLocationRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    List<Object> map = (List<Object>) dataSnapshot.getValue();
+                    double locationLat = 0;
+                    double locationLng = 0;
+                    if (map.get(0) != null){
+                        locationLat = Double.parseDouble(map.get(0).toString());
+                    }
+                    if (map.get(1) != null){
+                        locationLng = Double.parseDouble(map.get(1).toString());
+                    }
+                    LatLng driverLocation = new LatLng(locationLat, locationLng);
+                    LatLng studentLocation = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+
+
+                    Location loc1 = new Location("");
+                    loc1.setLatitude(studentLocation.latitude);
+                    loc1.setLongitude(studentLocation.longitude);
+
+                    Location loc2 = new Location("");
+                    loc2.setLatitude(driverLocation.latitude);
+                    loc2.setLongitude(driverLocation.longitude);
+
+                    float distance = Math.round(loc1.distanceTo(loc2)/1000);
+
+                    mDriverDistance.setText("Distance: " + distance);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+    }
+
 
 
     @Override
@@ -380,7 +396,6 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
         // after generating our bitmap we are returning our bitmap.
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
-
 
     LocationCallback mLocationCallback = new LocationCallback(){
         @Override

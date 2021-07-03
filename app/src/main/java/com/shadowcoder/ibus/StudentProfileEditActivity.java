@@ -303,11 +303,21 @@ public class StudentProfileEditActivity extends AppCompatActivity {
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Task<Uri> downloadUrl = taskSnapshot.getMetadata().getReference().getDownloadUrl();
+                    Task<Uri> downloadUrl = taskSnapshot.getMetadata().getReference().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            //Got the uri
+                            Map newImage = new HashMap();
+                            newImage.put("profileImageUrl", uri.toString());
+                            mStudentDatabase.updateChildren(newImage);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull @NotNull Exception e) {
+                            Toast.makeText(getApplication(), "Failed to upload", Toast.LENGTH_LONG).show();
+                        }
+                    });
 
-                    Map newImage = new HashMap();
-                    newImage.put("profileImageUrl", downloadUrl.toString());
-                    mStudentDatabase.updateChildren(newImage);
                     finish();
                     return;
                 }

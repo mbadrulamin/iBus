@@ -332,11 +332,20 @@ public class DriverProfileEditActivity extends AppCompatActivity {
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Task<Uri> downloadUrl = taskSnapshot.getMetadata().getReference().getDownloadUrl();
-
-                    Map newImage = new HashMap();
-                    newImage.put("profileImageUrl", downloadUrl.toString());
-                    mDriverDatabase.updateChildren(newImage);
+                    Task<Uri> downloadUrl = taskSnapshot.getMetadata().getReference().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            //Got the uri
+                            Map newImage = new HashMap();
+                            newImage.put("profileImageUrl", uri.toString());
+                            mDriverDatabase.updateChildren(newImage);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull @NotNull Exception e) {
+                            Toast.makeText(getApplication(), "Failed to upload", Toast.LENGTH_LONG).show();
+                        }
+                    });
 
                     finish();
                     return;
