@@ -56,50 +56,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class StudentMapActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
-
-    private void checkLocationPermission() {
-        if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_FINE_LOCATION)) {
-                new android.app.AlertDialog.Builder(this)
-                        .setTitle("give permission")
-                        .setMessage("give permission message")
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                ActivityCompat.requestPermissions(StudentMapActivity.this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-                            }
-                        })
-                        .create()
-                        .show();
-            }
-            else{
-                ActivityCompat.requestPermissions(StudentMapActivity.this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            }
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch(requestCode){
-            case 1:{
-                if(grantResults.length >0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-                        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
-                        mMap.setMyLocationEnabled(true);
-                    }
-                } else{
-                    Toast.makeText(getApplicationContext(), "Please provide the permission", Toast.LENGTH_LONG).show();
-                }
-                break;
-            }
-        }
-    }
 
     private GoogleMap mMap;
 
@@ -116,7 +79,7 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
     private Marker mDriverMarker;
 
     private BottomSheetDialog bottomSheetDialog;
-    private TextView NameDriver,PlateDriver,RouteDriver,PhoneDriver;
+    private TextView NameDriver,PlateDriver,RouteDriver,PhoneDriver, mDriverDistance;
 
 
 
@@ -136,6 +99,7 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
 
 
         mBackButton = findViewById(R.id.backButtonStudent);
+        mDriverDistance = findViewById(R.id.driverDistance);
 
 
         mBackButton.setOnClickListener(new View.OnClickListener() {
@@ -148,6 +112,20 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
         });
     }
 
+
+        /*-------------------------------------------- Map specific functions -----
+    |  Function(s) getDriversAround
+    |
+    |  Purpose:  Get's most updated drivers location and it's always checking for movements.
+    |
+    |  Note:
+    |	   Even tho we used geofire to push the location of the driver we can use a normal
+    |      Listener to get it's location with no problem.
+    |
+    |      0 -> Latitude
+    |      1 -> Longitudde
+    |
+    *-------------------------------------------------------------------*/
 
     boolean getDriversAroundStarted = false;
     List<Marker> markers = new ArrayList<Marker>();
@@ -238,7 +216,9 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
 |
 *-------------------------------------------------------------------*/
     private void getDriverInfo(String driverFoundID){
-        DatabaseReference mCustomerDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child("Drivers").child(driverFoundID);
+
+        DatabaseReference mDriverDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child("Drivers").child(driverFoundID);
+        DatabaseReference driverLocationRef = FirebaseDatabase.getInstance().getReference().child("driversAvailable").child(driverFoundID).child("l");
 
         bottomSheetDialog = new BottomSheetDialog(StudentMapActivity.this,R.style.BottomSheetTheme);
         View sheetView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.fragment_bottom_sheet, (ViewGroup) findViewById(R.id.bottomSheetContainerStudent));
@@ -248,7 +228,36 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
         RouteDriver = sheetView.findViewById(R.id.route_bus_driver);
         PhoneDriver = sheetView.findViewById(R.id.phone_bus_driver);
 
-        mCustomerDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+        driverLocationRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    List<Object> map = (List<Object>) dataSnapshot.getValue();
+                    double locationLat = 0;
+                    double locationLng = 0;
+                    if (map.get(0) != null){
+                        locationLat = Double.parseDouble(map.get(0).toString());
+                    }
+                    if (map.get(1) != null){
+                        locationLng = Double.parseDouble(map.get(0).toString());
+                    }
+                    Location driverLocation = new Location("");
+                    driverLocation.setLatitude(locationLat);
+                    driverLocation.setLongitude(locationLng);
+
+                    float distance = mLastLocation.distanceTo(driverLocation);
+
+                    mDriverDistance.setText("Distance: " + distance);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+
+        mDriverDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists() && dataSnapshot.getChildrenCount()>0){
@@ -267,6 +276,7 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
                     if(dataSnapshot.child("route")!=null){
                         RouteDriver.setText(dataSnapshot.child("route").getValue().toString());
                     }
+
 //                    if(dataSnapshot.child("profileImageUrl").getValue()!=null){
 //                        Glide.with(getApplication()).load(dataSnapshot.child("profileImageUrl").getValue().toString()).into(mDriverProfileImage);
 //                    }
@@ -389,6 +399,45 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
             }
         }
     };
+
+    private void checkLocationPermission() {
+        if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_FINE_LOCATION)) {
+                new android.app.AlertDialog.Builder(this)
+                        .setTitle("give permission")
+                        .setMessage("give permission message")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                ActivityCompat.requestPermissions(StudentMapActivity.this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                            }
+                        })
+                        .create()
+                        .show();
+            }
+            else{
+                ActivityCompat.requestPermissions(StudentMapActivity.this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch(requestCode){
+            case 1:{
+                if(grantResults.length >0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+                        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
+                        mMap.setMyLocationEnabled(true);
+                    }
+                } else{
+                    Toast.makeText(getApplicationContext(), "Please provide the permission", Toast.LENGTH_LONG).show();
+                }
+                break;
+            }
+        }
+    }
 
 
     @Override
