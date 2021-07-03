@@ -13,4 +13,5 @@
     <color name="transparent">#00000000</color>
     <color name="green">#3FE632</color>
     <color name="bottomSheet">#2169F3</color>
+    <color name="darkMode">#161618</color>
 </resources>

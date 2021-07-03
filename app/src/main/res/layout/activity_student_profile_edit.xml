@@ -35,26 +35,37 @@
 
             <ImageView
                 android:id="@+id/studentImageProfile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="134dp"
+                android:layout_height="125dp"
                 android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toEndOf="@+id/view"
+                app:layout_constraintHorizontal_bias="0.491"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/view"
+                app:layout_constraintTop_toBottomOf="@+id/TitleStudent"
+                android:src="@drawable/ic_default_user"
                 tools:srcCompat="@tools:sample/avatars" />
+
+            <ImageView
+                android:id="@+id/getImageStudent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@+id/studentImageProfile"
+                app:layout_constraintStart_toEndOf="@+id/studentImageProfile"
+                app:srcCompat="@drawable/ic_edit" />
 
             <TextView
                 android:id="@+id/TitleStudent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="24dp"
                 android:text="Edit Your Information Here"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/studentImageProfile"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/studentImageProfile" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
                 android:id="@+id/studentNameProfile"
@@ -155,7 +166,6 @@
                 android:id="@+id/textView6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
                 android:paddingStart="16dp"
                 android:text="Full Name"
                 android:textColor="?android:textColorPrimary"

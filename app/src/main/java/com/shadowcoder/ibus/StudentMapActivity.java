@@ -294,9 +294,9 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
                     loc2.setLatitude(driverLocation.latitude);
                     loc2.setLongitude(driverLocation.longitude);
 
-                    float distance = Math.round(loc1.distanceTo(loc2)/1000);
+                    float distance = loc1.distanceTo(loc2)/1000;
 
-                    mDriverDistance.setText("Distance: " + distance);
+                    mDriverDistance.setText(String.format("%.4g%n",distance));
 
                 }
             }

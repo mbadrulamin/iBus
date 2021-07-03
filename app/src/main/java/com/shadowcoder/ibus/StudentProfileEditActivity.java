@@ -55,7 +55,7 @@ public class StudentProfileEditActivity extends AppCompatActivity {
 
     private TextView mChangePass;
 
-    private ImageView mProfileImage;
+    private ImageView mProfileImage, mGetImage;
 
     private DatabaseReference mStudentDatabase;
 
@@ -80,6 +80,7 @@ public class StudentProfileEditActivity extends AppCompatActivity {
         //mBack = findViewById(R.id.studentBackButtonProfile);
         mConfirm = findViewById(R.id.studentConfirmButtonProfile);
         mChangePass = findViewById(R.id.studentChangePassword);
+        mGetImage = findViewById(R.id.getImageStudent);
 
         mProfileImage = (ImageView) findViewById(R.id.studentImageProfile);
 
@@ -88,7 +89,7 @@ public class StudentProfileEditActivity extends AppCompatActivity {
 
         getUserInfo();
 
-        mProfileImage.setOnClickListener(new View.OnClickListener() {
+        mGetImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -104,6 +105,24 @@ public class StudentProfileEditActivity extends AppCompatActivity {
                 startActivityForResult(chooserIntent, 1);
             }
         });
+
+
+       /* mProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                getIntent.setType("image/*");
+
+
+                Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                pickIntent.setType("image/*");
+
+                Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
+
+                startActivityForResult(chooserIntent, 1);
+            }
+        });*/
 
         mConfirm.setOnClickListener(new View.OnClickListener() {
             @Override

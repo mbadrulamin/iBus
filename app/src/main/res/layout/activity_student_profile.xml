@@ -33,6 +33,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/my_profileStudent"
+        android:src="@drawable/ic_default_user"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView

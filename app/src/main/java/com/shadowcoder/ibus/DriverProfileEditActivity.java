@@ -53,11 +53,11 @@ public class DriverProfileEditActivity extends AppCompatActivity {
 
     private EditText mNameField, mPhoneField, mStaffIdField, mEmailField, mBusRegistrationNoField, enterPassword, confirmPassword, oldPassword;
 
-    private Button mBack, mConfirm, mGetImage;
+    private Button mBack, mConfirm;
 
-    private TextView UpdatePass;
+    private TextView UpdatePass ;
 
-    private ImageView mProfileImage;
+    private ImageView mProfileImage , mGetImage;
 
     private DatabaseReference mDriverDatabase;
 
