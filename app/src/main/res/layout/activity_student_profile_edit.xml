@@ -70,7 +70,7 @@
             <EditText
                 android:id="@+id/studentNameProfile"
                 android:layout_width="0dp"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginEnd="32dp"
                 android:background="@drawable/round_border"
@@ -96,7 +96,6 @@
                 android:padding="16dp"
                 android:textSize="18dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.511"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/studentMatricNoProfile" />
 
@@ -132,7 +131,7 @@
             <EditText
                 android:id="@+id/studentEmailProfile"
                 android:layout_width="0dp"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="64dp"
                 android:layout_marginEnd="32dp"
@@ -142,14 +141,13 @@
                 android:inputType="textEmailAddress"
                 android:padding="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.497"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/studentNameProfile" />
 
             <EditText
                 android:id="@+id/studentMatricNoProfile"
                 android:layout_width="0dp"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="64dp"
                 android:layout_marginEnd="32dp"
