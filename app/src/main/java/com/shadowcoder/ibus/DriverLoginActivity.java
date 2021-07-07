@@ -8,6 +8,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -29,6 +30,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.regex.Pattern;
 
 public class DriverLoginActivity extends AppCompatActivity {
 
@@ -193,24 +196,47 @@ public class DriverLoginActivity extends AppCompatActivity {
 
 
     private Boolean validateEmail() {
-        String val = mEmail.getText().toString();
-        if (val.isEmpty()) {
+        String emailInput = mEmail.getText().toString();
+        if (emailInput.isEmpty()) {
             mEmail.setError("Field cannot be empty");
+            return false;
+        }
+
+        // Matching the input email to a predefined email pattern
+        else if (!Patterns.EMAIL_ADDRESS.matcher(emailInput).matches()) {
+            mEmail.setError("Please enter a valid email address");
             return false;
         } else {
             mEmail.setError(null);
-            //mEmail.setErrorEnabled(false);
             return true;
         }
     }
+
+    // defining our own password pattern
+    private static final Pattern PASSWORD_PATTERN =
+            Pattern.compile("^" +
+                    "(?=.*[@#$%^&+=])" +     // at least 1 special character
+                    "(?=\\S+$)" +            // no white spaces
+                    ".{4,}" +                // at least 4 characters
+                    "$");
+
     private Boolean validatePassword() {
-        String val = mPassword.getText().toString();
-        if (val.isEmpty()) {
+
+        // if password field is empty
+        // it will display error message "Field can not be empty"
+        String passwordInput = mPassword.getText().toString();
+        if (passwordInput.isEmpty()) {
             mPassword.setError("Field cannot be empty");
+            return false;
+        }
+
+        // if password does not matches to the pattern
+        // it will display an error message "Password is too weak"
+        else if (!PASSWORD_PATTERN.matcher(passwordInput).matches()) {
+            mPassword.setError("Password is too weak");
             return false;
         } else {
             mPassword.setError(null);
-            //mPassword.setErrorEnabled(false);
             return true;
         }
     }
