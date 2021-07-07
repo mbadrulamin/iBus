@@ -27,7 +27,7 @@ public class DriverMainMenuActivity extends AppCompatActivity {
     private String userId, mName;
     private TextView nameDriver;
 
-    private Button busRealTime, profileStudent, logout, route;
+    private Button busRealTime, profileDriver, logout, route;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +37,7 @@ public class DriverMainMenuActivity extends AppCompatActivity {
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         busRealTime = findViewById(R.id.real_time_location);
-        profileStudent = findViewById(R.id.profileDriver);
+        profileDriver = findViewById(R.id.profileDriver);
         logout = findViewById(R.id.logout);
         nameDriver = findViewById(R.id.name_userDriver);
         route = findViewById(R.id.route_Driver);
@@ -54,7 +54,7 @@ public class DriverMainMenuActivity extends AppCompatActivity {
             }
         });
 
-        profileStudent.setOnClickListener(new View.OnClickListener() {
+        profileDriver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(DriverMainMenuActivity.this, DriverProfileActivity.class);

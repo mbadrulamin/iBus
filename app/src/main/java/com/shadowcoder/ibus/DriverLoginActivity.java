@@ -69,7 +69,7 @@ public class DriverLoginActivity extends AppCompatActivity {
                                 return;
                             }
                             else{
-                                Toast.makeText(DriverLoginActivity.this, "Are you a driver? Login", Toast.LENGTH_LONG).show();
+                                Toast.makeText(DriverLoginActivity.this, "Are you a driver? Please login", Toast.LENGTH_LONG).show();
                             }
                         }
 
@@ -163,18 +163,24 @@ public class DriverLoginActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         //get email and send reset link
                         String userEmail = resetPass.getText().toString();
-                        mAuth.sendPasswordResetEmail(userEmail).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                Toast.makeText(getApplication(), "Password reset email sent", Toast.LENGTH_LONG).show();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull @NotNull Exception e) {
-                                Toast.makeText(getApplication(), "Failed! Please try again", Toast.LENGTH_LONG).show();
-                            }
-                        });
-                        dialog.dismiss();
+                        try {
+                            mAuth.sendPasswordResetEmail(userEmail).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    Toast.makeText(getApplication(), "Password reset email sent", Toast.LENGTH_LONG).show();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull @NotNull Exception e) {
+                                    Toast.makeText(getApplication(), "Failed! Please try again", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                            dialog.dismiss();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Toast.makeText(DriverLoginActivity.this, "Email field cannot be empty", Toast.LENGTH_SHORT).show();
+                        }
+
                     }
                 });
                 dialog.show();
@@ -233,7 +239,7 @@ public class DriverLoginActivity extends AppCompatActivity {
         // if password does not matches to the pattern
         // it will display an error message "Password is too weak"
         else if (!PASSWORD_PATTERN.matcher(passwordInput).matches()) {
-            mPassword.setError("Password is too weak");
+            mPassword.setError("Wrong Password");
             return false;
         } else {
             mPassword.setError(null);

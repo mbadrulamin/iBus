@@ -108,8 +108,6 @@ public class DriverMapActivity extends FragmentActivity implements OnMapReadyCal
                         }
                     }
 
-
-
                 }
 
             }
