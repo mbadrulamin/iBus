@@ -57,7 +57,7 @@ public class DriverProfileEditActivity extends AppCompatActivity {
 
     private Button mBack, mConfirm;
 
-    private TextView UpdatePass ;
+    private TextView UpdatePass ,enterPassError, confirmPassError;
 
     private ImageView mProfileImage , mGetImage;
 
@@ -180,6 +180,8 @@ public class DriverProfileEditActivity extends AppCompatActivity {
         enterPassword = dialog.findViewById(R.id.enterPasswordET);
         confirmPassword = dialog.findViewById(R.id.confirmPasswordET);
         oldPassword = dialog.findViewById(R.id.oldPasswordET);
+        enterPassError = dialog.findViewById(R.id.enterPassError);
+        confirmPassError = dialog.findViewById(R.id.confirmPassError);
 
 
         Button updatePass = dialog.findViewById(R.id.updatePasswordButton);
@@ -230,15 +232,6 @@ public class DriverProfileEditActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    //Pass password to this class/print to certain text view
-    //private void populateInfoTv(String name, String age, Boolean hasAcceptedTerms) {
-        //infoTv.setVisibility(View.VISIBLE);
-        //String acceptedText = "have";
-        //if(!hasAcceptedTerms) {
-        //acceptedText = "have not";
-        //}
-        //infoTv.setText(String.format(getString(R.string.info), name, age, acceptedText));
-    //}
 
     private void getUserInfo(){
         mDriverDatabase.addValueEventListener(new ValueEventListener() {
@@ -410,16 +403,16 @@ public class DriverProfileEditActivity extends AppCompatActivity {
         String pass = enterPassword.getText().toString().trim();
         String confirmPass = confirmPassword.getText().toString().trim();
         if (pass.isEmpty() | confirmPass.isEmpty()) {
-            enterPassword.setError("Field cannot be empty");
-            confirmPassword.setError("Field cannot be empty");
+            enterPassError.setText("Field can not be empty");
+            confirmPassError.setText("Field can not be empty");
             return false;
         }
 
         // if password does not matches to the pattern
         // it will display an error message "Password is too weak"
         else if (!PASSWORD_PATTERN.matcher(confirmPass).matches()) {
-            enterPassword.setError("Password is too weak");
-            confirmPassword.setError("Password is too weak");
+            enterPassError.setText("Password is too weak");
+            confirmPassError.setText("Password is too weak");
             return false;
         }
         else if (pass.equals(confirmPass)){
