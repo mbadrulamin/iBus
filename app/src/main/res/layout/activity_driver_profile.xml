@@ -76,7 +76,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:textColor="?android:textColor"
+        android:textColor="@color/colorPrimary"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/textViewDriverProfile"
         app:layout_constraintTop_toBottomOf="@+id/textViewDriverProfile" />
@@ -99,7 +99,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:textColor="?android:textColor"
+        android:textColor="@color/colorPrimary"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/textViewDriverProfile2"
         app:layout_constraintTop_toBottomOf="@+id/textViewDriverProfile2" />
@@ -122,7 +122,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:textColor="?android:textColor"
+        android:textColor="@color/colorPrimary"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/textViewDriverProfile3"
         app:layout_constraintTop_toBottomOf="@+id/textViewDriverProfile3" />
@@ -145,7 +145,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:textColor="?android:textColor"
+        android:textColor="@color/colorPrimary"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/textViewDriverProfile4"
         app:layout_constraintTop_toBottomOf="@+id/textViewDriverProfile4" />
@@ -170,7 +170,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:textColor="?android:textColor"
+        android:textColor="@color/colorPrimary"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/textViewDriverProfile5"
         app:layout_constraintTop_toBottomOf="@+id/textViewDriverProfile5" />

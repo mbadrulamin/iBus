@@ -40,7 +40,6 @@
         android:hint="Email"
         android:inputType="textEmailAddress"
         android:padding="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/Wave"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/waveHeader"
