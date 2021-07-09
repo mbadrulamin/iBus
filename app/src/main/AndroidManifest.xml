@@ -19,6 +19,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.IBus">
+        <service android:name=".onAppKilled" android:stopWithTask="false"/>
         <activity android:name=".RouteEditActivity"
             android:screenOrientation="portrait"></activity>
         <activity android:name=".RouteRegisterActivity"

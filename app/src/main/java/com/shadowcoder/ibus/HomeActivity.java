@@ -54,6 +54,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.home_nav);
 
+        startService(new Intent(HomeActivity.this, onAppKilled.class));
+
         mDriver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

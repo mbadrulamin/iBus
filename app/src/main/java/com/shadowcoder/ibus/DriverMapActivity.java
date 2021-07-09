@@ -65,7 +65,6 @@ public class DriverMapActivity extends FragmentActivity implements OnMapReadyCal
     private SupportMapFragment mapFragment;
     private Button mBackButton;
     private String studentId = "";
-    private Boolean isLoggingOut = false;
     private LinearLayout mStudentInfo;
     private ImageView mStudentProfileImage;
     private TextView mStudentName, mStudentPhone;
@@ -152,12 +151,12 @@ public class DriverMapActivity extends FragmentActivity implements OnMapReadyCal
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
-                    connectDriver();
                     isWorking = true;
+                    connectDriver();
                 }
                 else{
-                    disconnectDriver();
                     isWorking = false;
+                    disconnectDriver();
                 }
             }
         });
@@ -356,13 +355,13 @@ public class DriverMapActivity extends FragmentActivity implements OnMapReadyCal
     }
 
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (!isLoggingOut){
-            disconnectDriver();
-        }
-    }
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        if (!driverIsLoggingOut){
+//            disconnectDriver();
+//        }
+//    }
 
     @Override
     public void onBackPressed() {
