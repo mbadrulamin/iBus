@@ -8,32 +8,30 @@
     tools:context=".StudentLoginActivity">
 
 
-    <View
-        android:id="@+id/topView"
-        android:layout_width="0dp"
-        android:layout_height="150dp"
-        android:background="@color/colorPrimary"
+    <com.scwang.wave.MultiWaveHeader
+        android:id="@+id/waveHeader"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:mwhCloseColor="@color/colorPrimary"
+        app:mwhColorAlpha="0.50"
+        app:mwhGradientAngle="90"
+        app:mwhProgress="1"
+        app:mwhStartColor="@color/colorPrimary"
+        app:mwhVelocity="7"
+        app:mwhWaveHeight="30dp"
+        app:mwhWaves="MultiWave">
 
-
-    <View
-        android:id="@+id/Wave"
-        android:layout_width="0dp"
-        android:layout_height="150dp"
-        android:background="@drawable/ic_wave"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topView" />
+    </com.scwang.wave.MultiWaveHeader>
 
     <EditText
         android:id="@+id/emailDriver"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="32dp"
         android:background="@drawable/round_border"
         android:drawableStart="@drawable/ic_email"
@@ -45,7 +43,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/Wave"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topView"
+        app:layout_constraintTop_toBottomOf="@+id/waveHeader"
         app:layout_constraintVertical_bias="1.0" />
 
     <EditText
@@ -68,34 +66,29 @@
 
     <TextView
         android:id="@+id/topTextRegisterStudent"
-        android:layout_width="304dp"
-        android:layout_height="69dp"
-        android:layout_marginStart="16dp"
+        android:layout_width="305dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
         android:text="Welcome To"
         android:textColor="@color/white"
         android:textSize="48sp"
-        app:layout_constraintBottom_toBottomOf="@+id/topView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.318"
-        app:layout_constraintStart_toStartOf="@+id/topView"
-        app:layout_constraintTop_toTopOf="@+id/topView"
-        app:layout_constraintVertical_bias="0.197" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/name_userDriver"
-        android:layout_width="352dp"
+        android:layout_width="350dp"
         android:layout_height="70dp"
-        android:layout_marginStart="16dp"
+        android:gravity="center"
         android:text="Student Sign In"
         android:textColor="@color/white"
         android:textSize="48sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/topView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.652"
-        app:layout_constraintStart_toStartOf="@+id/topView"
-        app:layout_constraintTop_toTopOf="@+id/topView"
-        app:layout_constraintVertical_bias="0.835" />
+        app:layout_constraintEnd_toEndOf="@+id/topTextRegisterStudent"
+        app:layout_constraintStart_toStartOf="@+id/topTextRegisterStudent"
+        app:layout_constraintTop_toBottomOf="@+id/topTextRegisterStudent" />
 
     <Button
         android:id="@+id/login"
@@ -148,7 +141,7 @@
         android:background="@android:color/transparent"
         android:gravity="center"
         android:text="Sign Up"
-        android:textColor="@color/blue"
+        android:textColor="?android:textColorSecondary"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"

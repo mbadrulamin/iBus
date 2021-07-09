@@ -7,39 +7,37 @@
     android:layout_height="match_parent"
     tools:context=".StudentSignUpActivity">
 
-    <View
-        android:id="@+id/view"
-        android:layout_width="wrap_content"
-        android:layout_height="150dp"
-        android:background="@color/colorPrimary"
+    <com.scwang.wave.MultiWaveHeader
+        android:id="@+id/waveHeader"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:mwhCloseColor="@color/colorPrimary"
+        app:mwhColorAlpha="0.50"
+        app:mwhGradientAngle="90"
+        app:mwhProgress="1"
+        app:mwhStartColor="@color/colorPrimary"
+        app:mwhVelocity="7"
+        app:mwhWaveHeight="30dp"
+        app:mwhWaves="MultiWave">
 
-    <View
-        android:id="@+id/view2"
-        android:layout_width="wrap_content"
-        android:layout_height="100dp"
-        android:background="@drawable/ic_wave"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view" />
+    </com.scwang.wave.MultiWaveHeader>
 
     <TextView
         android:id="@+id/topTextRegisterStudent"
         android:layout_width="326dp"
         android:layout_height="119dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
         android:text="Student Registeration"
         android:textColor="@color/white"
         android:textSize="48sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/view"
-        app:layout_constraintTop_toTopOf="@+id/view"
-        app:layout_constraintVertical_bias="0.7" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/studentNameSignup"
@@ -54,7 +52,7 @@
         android:padding="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view2" />
+        app:layout_constraintTop_toBottomOf="@+id/waveHeader" />
 
     <EditText
         android:id="@+id/studentPhoneSignup"

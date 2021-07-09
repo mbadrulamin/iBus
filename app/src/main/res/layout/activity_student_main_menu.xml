@@ -7,81 +7,71 @@
     android:layout_height="match_parent"
     tools:context=".StudentMainMenuActivity">
 
+    <com.scwang.wave.MultiWaveHeader
+        android:id="@+id/waveHeader"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:mwhCloseColor="@color/colorPrimary"
+        app:mwhColorAlpha="0.50"
+        app:mwhGradientAngle="90"
+        app:mwhProgress="1"
+        app:mwhStartColor="@color/colorPrimary"
+        app:mwhVelocity="7"
+        app:mwhWaveHeight="30dp"
+        app:mwhWaves="MultiWave">
 
-    <View
-        android:id="@+id/topView"
-        android:layout_width="0dp"
-        android:layout_height="150dp"
-        android:background="@color/colorPrimary"
+    </com.scwang.wave.MultiWaveHeader>
+
+    <TextView
+        android:id="@+id/topTextRegisterStudent"
+        android:layout_width="300dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="Welcome"
+        android:textColor="@color/white"
+        android:textSize="48sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
-    <View
-        android:id="@+id/Wave"
-        android:layout_width="0dp"
-        android:layout_height="150dp"
-        android:background="@drawable/ic_wave"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topView" />
-
-    <TextView
-        android:id="@+id/topTextRegisterStudent"
-        android:layout_width="304dp"
-        android:layout_height="69dp"
-        android:layout_marginStart="16dp"
-        android:text="Welcome"
-        android:textColor="@color/white"
-        android:textSize="48sp"
-        app:layout_constraintBottom_toBottomOf="@+id/topView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.318"
-        app:layout_constraintStart_toStartOf="@+id/topView"
-        app:layout_constraintTop_toTopOf="@+id/topView"
-        app:layout_constraintVertical_bias="0.197" />
-
     <TextView
         android:id="@+id/name_userDriver"
-        android:layout_width="352dp"
+        android:layout_width="300dp"
         android:layout_height="70dp"
-        android:layout_marginStart="16dp"
+        android:gravity="center"
         android:textColor="@color/white"
         android:textSize="48sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/topView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.652"
-        app:layout_constraintStart_toStartOf="@+id/topView"
-        app:layout_constraintTop_toTopOf="@+id/topView"
-        app:layout_constraintVertical_bias="0.835" />
+        app:layout_constraintStart_toStartOf="@+id/topTextRegisterStudent"
+        app:layout_constraintTop_toBottomOf="@+id/topTextRegisterStudent" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="Main Menu"
         android:textColor="?android:textColorPrimary"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/Wave"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topView"
-        app:layout_constraintVertical_bias="0.813" />
+        app:layout_constraintTop_toBottomOf="@+id/waveHeader" />
 
     <Button
         android:id="@+id/bus_scheduleStudent"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/round_shape"
         android:text="Bus Schedule"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Wave" />
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <Button
         android:id="@+id/real_time_location"
@@ -111,12 +101,10 @@
         android:layout_height="48dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/ic_logout"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileDriver"
-        app:layout_constraintVertical_bias="0.169" />
+        app:layout_constraintTop_toBottomOf="@+id/profileDriver" />
 
     <ImageView
         android:id="@+id/iconStudentMainMenu"

@@ -20,11 +20,27 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <com.scwang.wave.MultiWaveHeader
+            android:id="@+id/waveHeader"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            app:layout_constraintTop_toTopOf="@+id/toolbar_home"
+            app:mwhCloseColor="@color/colorPrimary"
+            app:mwhColorAlpha="0.50"
+            app:mwhGradientAngle="90"
+            app:mwhProgress="1"
+            app:mwhStartColor="@color/colorPrimary"
+            app:mwhVelocity="7"
+            app:mwhWaveHeight="30dp"
+            app:mwhWaves="MultiWave">
+
+        </com.scwang.wave.MultiWaveHeader>
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar_home"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
+            android:background="@color/transparent"
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme"
             app:contentInsetStartWithNavigation="72dp"
@@ -35,34 +51,25 @@
             app:subtitleTextAppearance="@android:style/Animation.Translucent" />
 
 
-        <View
-            android:id="@+id/Wave"
-            android:layout_width="0dp"
-            android:layout_height="150dp"
-            android:background="@drawable/ic_wave"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar_home" />
-
         <TextView
             android:id="@+id/name_userDriver"
-            android:layout_width="215dp"
-            android:layout_height="59dp"
+            android:layout_width="236dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="32dp"
+            android:gravity="center"
             android:text="Feedback"
             android:textColor="@color/white"
             android:textSize="48sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/Wave"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.107" />
+            app:layout_constraintTop_toTopOf="@+id/waveHeader" />
 
         <TextView
             android:id="@+id/textView7"
             android:layout_width="328dp"
             android:layout_height="100dp"
+            android:layout_marginTop="24dp"
             android:text="Feel free to give us opinion and improvement for the app"
             android:textAlignment="center"
             android:textAllCaps="false"
@@ -71,7 +78,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/Wave" />
+            app:layout_constraintTop_toBottomOf="@+id/waveHeader" />
 
         <EditText
             android:id="@+id/nameFeedback"

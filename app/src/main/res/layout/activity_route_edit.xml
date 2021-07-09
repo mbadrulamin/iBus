@@ -6,52 +6,52 @@
     android:layout_height="match_parent"
     tools:context=".RouteEditActivity">
 
-    <View
-        android:id="@+id/topViewRouteEdit"
-        android:layout_width="wrap_content"
-        android:layout_height="150dp"
-        android:background="@color/colorPrimary"
+    <com.scwang.wave.MultiWaveHeader
+        android:id="@+id/waveHeader"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:mwhCloseColor="@color/colorPrimary"
+        app:mwhColorAlpha="0.50"
+        app:mwhGradientAngle="90"
+        app:mwhProgress="1"
+        app:mwhStartColor="@color/colorPrimary"
+        app:mwhVelocity="7"
+        app:mwhWaveHeight="30dp"
+        app:mwhWaves="MultiWave">
 
-    <View
-        android:id="@+id/viewWaveRouteEdit"
-        android:layout_width="wrap_content"
-        android:layout_height="150dp"
-        android:background="@drawable/ic_wave"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topViewRouteEdit" />
+    </com.scwang.wave.MultiWaveHeader>
 
     <TextView
         android:id="@+id/titleTextRouteEdit"
         android:layout_width="282dp"
         android:layout_height="129dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
         android:text="Bus Route Manager"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="48sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/topViewRouteEdit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/topViewRouteEdit" />
+        app:layout_constraintTop_toTopOf="@+id/waveHeader" />
 
     <TextView
         android:id="@+id/instructionRouteDriverEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
         android:text="Your current route :"
         android:textColor="?android:textColorPrimary"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewWaveRouteEdit" />
+        app:layout_constraintTop_toBottomOf="@+id/waveHeader" />
 
     <TextView
         android:id="@+id/currentRoute_text"

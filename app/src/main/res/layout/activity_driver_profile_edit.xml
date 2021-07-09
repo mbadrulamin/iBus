@@ -15,51 +15,60 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <View
-                android:id="@+id/view"
-                android:layout_width="wrap_content"
-                android:layout_height="150dp"
-                android:background="@color/colorPrimary"
+            <com.scwang.wave.MultiWaveHeader
+                android:id="@+id/waveHeader"
+                android:layout_width="match_parent"
+                android:layout_height="270dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:mwhCloseColor="@color/colorPrimary"
+                app:mwhColorAlpha="0.50"
+                app:mwhGradientAngle="90"
+                app:mwhProgress="1"
+                app:mwhStartColor="@color/colorPrimary"
+                app:mwhVelocity="7"
+                app:mwhWaveHeight="30dp"
+                app:mwhWaves="MultiWave">
+
+            </com.scwang.wave.MultiWaveHeader>
 
             <View
-                android:id="@+id/view2"
-                android:layout_width="wrap_content"
-                android:layout_height="180dp"
-                android:background="@drawable/ic_wave"
+                android:id="@+id/borderProfileDriver"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/ic_border_profile"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view" />
+                app:layout_constraintTop_toBottomOf="@+id/topTextRegisterStudent" />
 
             <ImageView
                 android:id="@+id/driverImageProfile"
-                android:layout_width="134dp"
+                android:layout_width="125dp"
                 android:layout_height="125dp"
-                android:layout_marginTop="16dp"
                 android:adjustViewBounds="false"
                 android:src="@drawable/ic_default_user"
-                app:layout_constraintEnd_toEndOf="@+id/view"
-                app:layout_constraintHorizontal_bias="0.494"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/topTextRegisterStudent"
+                app:layout_constraintBottom_toBottomOf="@+id/borderProfileDriver"
+                app:layout_constraintEnd_toEndOf="@+id/borderProfileDriver"
+                app:layout_constraintHorizontal_bias="0.527"
+                app:layout_constraintStart_toStartOf="@+id/borderProfileDriver"
+                app:layout_constraintTop_toTopOf="@+id/borderProfileDriver"
                 tools:srcCompat="@tools:sample/avatars" />
 
             <ImageView
                 android:id="@+id/getImageDriver"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:background="@drawable/ic_edit"
-                app:layout_constraintBottom_toBottomOf="@+id/driverImageProfile"
-                app:layout_constraintStart_toEndOf="@+id/driverImageProfile" />
+                app:layout_constraintBottom_toBottomOf="@+id/borderProfileDriver"
+                app:layout_constraintStart_toEndOf="@+id/borderProfileDriver" />
 
             <TextView
                 android:id="@+id/topTextRegisterStudent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="16dp"
                 android:text="Edit Your Information Here"
                 android:textColor="@color/white"
                 android:textSize="20sp"
@@ -67,7 +76,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.497"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/view" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textView8"
@@ -147,6 +156,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
+                android:layout_marginTop="64dp"
                 android:layout_marginEnd="32dp"
                 android:background="@drawable/round_border"
                 android:ems="10"
@@ -156,7 +166,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view2" />
+                app:layout_constraintTop_toBottomOf="@+id/waveHeader" />
 
             <EditText
                 android:id="@+id/driverPhoneProfile"
@@ -259,6 +269,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
                 android:text="To change password, please"
                 android:textColor="?android:textColorPrimary"
                 android:textSize="16sp"
@@ -272,7 +283,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:text="click here"
-                android:textColor="@color/blue"
+                android:textColor="?android:textColorSecondary"
                 android:textSize="16sp"
                 android:textStyle="bold|italic"
                 app:layout_constraintStart_toEndOf="@+id/textView29"

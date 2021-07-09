@@ -6,71 +6,77 @@
     android:layout_height="match_parent"
     tools:context=".DriverProfileActivity">
 
-    <View
-        android:id="@+id/topViewDriverProfile"
-        android:layout_width="wrap_content"
-        android:layout_height="150dp"
-        android:background="@color/colorPrimary"
+    <com.scwang.wave.MultiWaveHeader
+        android:id="@+id/waveHeader"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:mwhCloseColor="@color/colorPrimary"
+        app:mwhColorAlpha="0.50"
+        app:mwhGradientAngle="90"
+        app:mwhProgress="1"
+        app:mwhStartColor="@color/colorPrimary"
+        app:mwhVelocity="7"
+        app:mwhWaveHeight="30dp"
+        app:mwhWaves="MultiWave">
+
+    </com.scwang.wave.MultiWaveHeader>
 
     <View
-        android:id="@+id/waveDriverProfile"
-        android:layout_width="wrap_content"
-        android:layout_height="150dp"
-        android:background="@drawable/ic_wave"
+        android:id="@+id/borderProfile"
+        android:layout_width="115dp"
+        android:layout_height="115dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/ic_border_profile"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topViewDriverProfile" />
+        app:layout_constraintTop_toBottomOf="@+id/my_profileDriver" />
 
     <ImageView
         android:id="@+id/image_profileDriver"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/my_profileDriver"
         android:src="@drawable/ic_default_user"
+        app:layout_constraintBottom_toBottomOf="@+id/borderProfile"
+        app:layout_constraintEnd_toEndOf="@+id/borderProfile"
+        app:layout_constraintStart_toStartOf="@+id/borderProfile"
+        app:layout_constraintTop_toTopOf="@+id/borderProfile"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/my_profileDriver"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="My Profile"
         android:textColor="@color/white"
         android:textSize="34sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/topViewDriverProfile"
-        app:layout_constraintEnd_toEndOf="@+id/topViewDriverProfile"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="@+id/topViewDriverProfile"
-        app:layout_constraintTop_toTopOf="@+id/topViewDriverProfile"
-        app:layout_constraintVertical_bias="0.152" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textViewDriverProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="128dp"
+        android:layout_marginTop="24dp"
         android:text="Fullname"
         android:textColor="?android:textColorPrimary"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topViewDriverProfile" />
+        app:layout_constraintTop_toBottomOf="@+id/waveHeader" />
 
     <TextView
         android:id="@+id/nameProfileDriver"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:textColor="@color/colorPrimary"
+        android:textColor="?android:textColor"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/textViewDriverProfile"
         app:layout_constraintTop_toBottomOf="@+id/textViewDriverProfile" />
@@ -93,7 +99,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:textColor="@color/colorPrimary"
+        android:textColor="?android:textColor"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/textViewDriverProfile2"
         app:layout_constraintTop_toBottomOf="@+id/textViewDriverProfile2" />
@@ -116,7 +122,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:textColor="@color/colorPrimary"
+        android:textColor="?android:textColor"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/textViewDriverProfile3"
         app:layout_constraintTop_toBottomOf="@+id/textViewDriverProfile3" />
@@ -139,7 +145,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:textColor="@color/colorPrimary"
+        android:textColor="?android:textColor"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/textViewDriverProfile4"
         app:layout_constraintTop_toBottomOf="@+id/textViewDriverProfile4" />
@@ -164,7 +170,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:textColor="@color/colorPrimary"
+        android:textColor="?android:textColor"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/textViewDriverProfile5"
         app:layout_constraintTop_toBottomOf="@+id/textViewDriverProfile5" />
