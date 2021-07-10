@@ -64,7 +64,7 @@ public class DriverMapActivity extends FragmentActivity implements OnMapReadyCal
     private ImageView mStudentProfileImage;
     private TextView mStudentName, mStudentPhone;
     private Switch mWorkingSwitch;
-    private Boolean isWorking = false;
+    private static Boolean isWorking = false;
 
     Location mLastLocation;
     LocationRequest mLocationRequest;
@@ -131,7 +131,9 @@ public class DriverMapActivity extends FragmentActivity implements OnMapReadyCal
         mStudentPhone = findViewById(R.id.customerPhone);
         mBackButton = findViewById(R.id.backButtonDriver);
         mWorkingSwitch = findViewById(R.id.workingSwitch);
-        isWorking = false;
+
+        //an object used to store the driver working state
+        DriverWorking dw = new DriverWorking();
 
         //save switch state in shared preference
         SharedPreferences sharedPreferences = getSharedPreferences("save", MODE_PRIVATE);
@@ -152,13 +154,20 @@ public class DriverMapActivity extends FragmentActivity implements OnMapReadyCal
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
                     isWorking = true;
+                    dw.setWorking(true);
                     connectDriver();
+                    // Creating an Editor object to edit(write to the file)
                     SharedPreferences.Editor editor = getSharedPreferences("save", MODE_PRIVATE).edit();
+                    // Storing the key and its value as the data fetched
                     editor.putBoolean("value", true);
+                    // Once the changes have been made,
+                    // we need to commit to apply those changes made,
+                    // otherwise, it will throw an error
                     editor.apply();
                 }
                 else{
                     isWorking = false;
+                    dw.setWorking(false);
                     disconnectDriver();
                     SharedPreferences.Editor editor = getSharedPreferences("save", MODE_PRIVATE).edit();
                     editor.putBoolean("value", false);

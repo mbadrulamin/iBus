@@ -35,6 +35,7 @@ public class DriverMainMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_driver_main_menu);
 
+        DriverWorking dw = new DriverWorking();
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         busRealTime = findViewById(R.id.real_time_location);
@@ -67,6 +68,10 @@ public class DriverMainMenuActivity extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (dw.getWorking()){
+                    Toast.makeText(DriverMainMenuActivity.this, "Please switch off on duty toggle", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 disconnectDriver();
                 FirebaseAuth.getInstance().signOut();
                 Intent intent = new Intent(DriverMainMenuActivity.this, HomeActivity.class);
