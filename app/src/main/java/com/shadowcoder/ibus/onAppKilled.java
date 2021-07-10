@@ -2,6 +2,7 @@ package com.shadowcoder.ibus;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.IBinder;
 
 import androidx.annotation.Nullable;
@@ -22,6 +23,17 @@ public class onAppKilled extends Service {
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         super.onTaskRemoved(rootIntent);
+
+        //save switch state in shared preference
+        SharedPreferences sharedPreferences = getSharedPreferences("save", MODE_PRIVATE);
+        // Creating an Editor object to edit(write to the file)
+        SharedPreferences.Editor editor = getSharedPreferences("save", MODE_PRIVATE).edit();
+        // Storing the key and its value as the data fetched
+        editor.putBoolean("value", false);
+        // Once the changes have been made,
+        // we need to commit to apply those changes made,
+        // otherwise, it will throw an error
+        editor.apply();
 
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("driversAvailable");
