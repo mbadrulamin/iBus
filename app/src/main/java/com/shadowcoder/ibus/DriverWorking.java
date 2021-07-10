@@ -1,7 +1,7 @@
 package com.shadowcoder.ibus;
 
 public class DriverWorking {
-    private static Boolean isWorking;
+    private static Boolean isWorking = false;
 
     public DriverWorking() {
 

@@ -64,7 +64,9 @@ public class DriverMapActivity extends FragmentActivity implements OnMapReadyCal
     private ImageView mStudentProfileImage;
     private TextView mStudentName, mStudentPhone;
     private Switch mWorkingSwitch;
-    private static Boolean isWorking = false;
+
+    //an object used to store the driver working state
+    DriverWorking dw = new DriverWorking();
 
     Location mLastLocation;
     LocationRequest mLocationRequest;
@@ -80,7 +82,7 @@ public class DriverMapActivity extends FragmentActivity implements OnMapReadyCal
 
                     //mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
                     //mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
-                    if (isWorking){
+                    if (dw.getWorking()){
                         try {
                             String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
                             DatabaseReference refAvailable = FirebaseDatabase.getInstance().getReference("driversAvailable");
@@ -100,6 +102,9 @@ public class DriverMapActivity extends FragmentActivity implements OnMapReadyCal
                             System.out.println("User has been logout");
                             e.printStackTrace();
                         }
+                    }
+                    else {
+                        return;
                     }
 
                 }
@@ -132,12 +137,11 @@ public class DriverMapActivity extends FragmentActivity implements OnMapReadyCal
         mBackButton = findViewById(R.id.backButtonDriver);
         mWorkingSwitch = findViewById(R.id.workingSwitch);
 
-        //an object used to store the driver working state
-        DriverWorking dw = new DriverWorking();
+
 
         //save switch state in shared preference
         SharedPreferences sharedPreferences = getSharedPreferences("save", MODE_PRIVATE);
-        mWorkingSwitch.setChecked(sharedPreferences.getBoolean("value", true));
+        mWorkingSwitch.setChecked(sharedPreferences.getBoolean("value", false));
 
 
         mBackButton.setOnClickListener(new View.OnClickListener() {
@@ -153,7 +157,7 @@ public class DriverMapActivity extends FragmentActivity implements OnMapReadyCal
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
-                    isWorking = true;
+
                     dw.setWorking(true);
                     connectDriver();
                     // Creating an Editor object to edit(write to the file)
@@ -166,7 +170,7 @@ public class DriverMapActivity extends FragmentActivity implements OnMapReadyCal
                     editor.apply();
                 }
                 else{
-                    isWorking = false;
+
                     dw.setWorking(false);
                     disconnectDriver();
                     SharedPreferences.Editor editor = getSharedPreferences("save", MODE_PRIVATE).edit();

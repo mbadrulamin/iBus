@@ -8,6 +8,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MenuItem;
@@ -54,7 +55,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.setCheckedItem(R.id.home_nav);
 
-        startService(new Intent(HomeActivity.this, onAppKilled.class));
+        //startService(new Intent(HomeActivity.this, onAppKilled.class));
+
+//        //start foreground service
+//        Intent intent = new Intent(this, MyService.class);
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+//            startForegroundService(intent);
+//        }
+//        else {
+//            startService(intent);
+//        }
 
         mDriver.setOnClickListener(new View.OnClickListener() {
             @Override
