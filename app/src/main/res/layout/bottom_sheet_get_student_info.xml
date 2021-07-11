@@ -123,6 +123,18 @@
         app:layout_constraintTop_toTopOf="@+id/distanceView_student" />
 
     <TextView
+        android:id="@+id/kilometreView_student"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="KM"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/getDistance_student"
+        app:layout_constraintTop_toTopOf="@+id/getDistance_student" />
+
+    <TextView
         android:id="@+id/space_bottomSheet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

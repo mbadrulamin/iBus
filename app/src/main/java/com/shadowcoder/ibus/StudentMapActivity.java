@@ -725,7 +725,7 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
 
                     float distance = loc1.distanceTo(loc2)/1000;
 
-                    StudentDistance.setText(String.format("%.4g%n",distance ) + " KM");
+                    StudentDistance.setText(String.format("%.4g%n",distance));
 
                 }
             }
