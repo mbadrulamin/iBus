@@ -90,7 +90,7 @@
                 android:padding="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/waveHeader" />
+                app:layout_constraintTop_toBottomOf="@+id/textView28" />
 
             <EditText
                 android:id="@+id/studentPhoneProfile"
@@ -138,21 +138,23 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/studentConfirmButtonProfile" /-->
 
-            <EditText
+            <TextView
                 android:id="@+id/studentEmailProfile"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="64dp"
                 android:layout_marginEnd="32dp"
-                android:background="@drawable/round_border"
                 android:ems="10"
                 android:hint="Email"
                 android:inputType="textEmailAddress"
                 android:padding="16dp"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="16sp"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/studentNameProfile" />
+                app:layout_constraintTop_toBottomOf="@+id/waveHeader" />
 
             <EditText
                 android:id="@+id/studentMatricNoProfile"
@@ -168,7 +170,7 @@
                 android:padding="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView28" />
+                app:layout_constraintTop_toBottomOf="@+id/studentNameProfile" />
 
             <TextView
                 android:id="@+id/textView6"

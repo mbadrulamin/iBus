@@ -52,11 +52,11 @@ import java.util.regex.Pattern;
 
 public class StudentProfileEditActivity extends AppCompatActivity {
 
-    private EditText mNameField, mPhoneField, mMatricNoField, mEmailField, enterPassword, confirmPassword, oldPassword;
+    private EditText mNameField, mPhoneField, mMatricNoField, enterPassword, confirmPassword, oldPassword;
 
     private Button mBack, mConfirm;
 
-    private TextView mChangePass, enterPassError, confirmPassError;
+    private TextView mChangePass, enterPassError, confirmPassError, mEmailField;
 
     private ImageView mProfileImage, mGetImage;
 

@@ -53,11 +53,11 @@ import java.util.regex.Pattern;
 
 public class DriverProfileEditActivity extends AppCompatActivity {
 
-    private EditText mNameField, mPhoneField, mStaffIdField, mEmailField, mBusRegistrationNoField, enterPassword, confirmPassword, oldPassword;
+    private EditText mNameField, mPhoneField, mStaffIdField, mBusRegistrationNoField, enterPassword, confirmPassword, oldPassword;
 
     private Button mBack, mConfirm;
 
-    private TextView UpdatePass ,enterPassError, confirmPassError;
+    private TextView UpdatePass ,enterPassError, confirmPassError, mEmailField;
 
     private ImageView mProfileImage , mGetImage;
 
@@ -132,7 +132,7 @@ public class DriverProfileEditActivity extends AppCompatActivity {
         mConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!validateName() | !validatePhone() | !validateStaffId()) {
+                if (!validateName() | !validatePhone() | !validateStaffId() | !validateBusRegisterationNo()) {
                     return;
                 } else {
                     saveUserInformation();
@@ -384,6 +384,17 @@ public class DriverProfileEditActivity extends AppCompatActivity {
             return false;
         } else {
             mPhoneField.setError(null);
+            return true;
+        }
+    }
+
+    private Boolean validateBusRegisterationNo() {
+        String val = mBusRegistrationNoField.getText().toString();
+        if (val.isEmpty()) {
+            mBusRegistrationNoField.setError("Field cannot be empty");
+            return false;
+        } else {
+            mBusRegistrationNoField.setError(null);
             return true;
         }
     }

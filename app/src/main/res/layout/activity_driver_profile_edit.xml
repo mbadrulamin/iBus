@@ -166,7 +166,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/waveHeader" />
+                app:layout_constraintTop_toBottomOf="@+id/textView29" />
 
             <EditText
                 android:id="@+id/driverPhoneProfile"
@@ -230,22 +230,24 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/driverConfirmButtonProfile" /-->
 
-            <EditText
+            <TextView
                 android:id="@+id/driverEmailProfile"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="64dp"
                 android:layout_marginEnd="32dp"
-                android:background="@drawable/round_border"
                 android:ems="10"
                 android:hint="Email"
                 android:inputType="textEmailAddress"
                 android:padding="16dp"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="16sp"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/driverNameProfile" />
+                app:layout_constraintTop_toBottomOf="@+id/waveHeader" />
 
             <EditText
                 android:id="@+id/driverStaffIdProfile"
@@ -262,7 +264,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView29" />
+                app:layout_constraintTop_toBottomOf="@+id/driverNameProfile" />
 
             <TextView
                 android:id="@+id/textView29"
