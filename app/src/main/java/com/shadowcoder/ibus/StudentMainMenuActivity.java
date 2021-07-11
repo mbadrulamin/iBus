@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.firebase.geofire.GeoFire;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -90,6 +91,11 @@ public class StudentMainMenuActivity extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (ds.getIsStudentVisible()){
+                    Toast.makeText(StudentMainMenuActivity.this, "Please switch off share my location toggle", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                disconnectStudent();
                 FirebaseAuth.getInstance().signOut();
                 Intent intent = new Intent(StudentMainMenuActivity.this, HomeActivity.class);
                 startActivity(intent);
@@ -137,6 +143,26 @@ public class StudentMainMenuActivity extends AppCompatActivity {
 
 
         }
+    }
+
+    private void disconnectStudent() {
+
+
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("studentsAvailable");
+
+        GeoFire geoFire = new GeoFire(ref);
+
+        geoFire.removeLocation(userId, new GeoFire.CompletionListener() {
+            @Override
+            public void onComplete(String key, DatabaseError error) {
+                if (error != null) {
+                    System.err.println("There was an error saving the location to GeoFire: " + error);
+                } else {
+                    System.out.println("Location saved on server successfully!");
+                }
+            }
+        });
     }
 
     @Override
