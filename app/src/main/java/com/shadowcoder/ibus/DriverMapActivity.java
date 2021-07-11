@@ -66,7 +66,7 @@ public class DriverMapActivity extends FragmentActivity implements OnMapReadyCal
     private Switch mWorkingSwitch;
 
     //an object used to store the driver working state
-    DriverWorking dw = new DriverWorking();
+    DriverStudent dw = new DriverStudent();
 
     Location mLastLocation;
     LocationRequest mLocationRequest;

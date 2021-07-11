@@ -1,8 +1,5 @@
 package com.shadowcoder.ibus;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -11,6 +8,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -36,6 +36,8 @@ public class StudentMainMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_main_menu);
 
+        DriverStudent ds = new DriverStudent();
+        ds.setIsStudent(true); ds.setIsDriver(false);
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         schedule = findViewById(R.id.bus_scheduleStudent);

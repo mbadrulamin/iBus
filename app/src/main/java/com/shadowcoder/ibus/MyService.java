@@ -10,58 +10,28 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.IBinder;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import com.firebase.geofire.GeoFire;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import org.jetbrains.annotations.NotNull;
 
 public class MyService extends Service {
-
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private DatabaseReference mDriverDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child("Drivers");
-    private DatabaseReference mStudentDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child("Students");
+    
+    DriverStudent ds = new DriverStudent();
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        mDriverDatabase.child(mAuth.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                if (snapshot.exists()){
-                    Driver();
-                }
-                return;
-            }
+        if (ds.getIsDriver())
+            Driver();
 
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+        else if (ds.getIsStudent())
+            Student();
 
-            }
-        });
-
-        mStudentDatabase.child(mAuth.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                if (snapshot.exists()){
-                    Student();
-                }
-                return;
-            }
-
-            @Override
-            public void onCancelled(@NonNull @NotNull DatabaseError error) {
-
-            }
-        });
         return START_STICKY;
     }
 
@@ -123,8 +93,8 @@ public class MyService extends Service {
     public void onTaskRemoved(Intent rootIntent) {
         super.onTaskRemoved(rootIntent);
 
-        DriverWorking dw = new DriverWorking();
-        dw.setWorking(false);
+        DriverStudent ds = new DriverStudent();
+        ds.setWorking(false);
         //save switch state in shared preference
         SharedPreferences sharedPreferences = getSharedPreferences("save", MODE_PRIVATE);
         // Creating an Editor object to edit(write to the file)
