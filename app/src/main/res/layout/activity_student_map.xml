@@ -36,4 +36,15 @@
         app:layout_constraintStart_toStartOf="@+id/backButtonStudent"
         app:layout_constraintTop_toBottomOf="@+id/backButtonStudent" />
 
+    <Switch
+        android:id="@+id/showLoc_student"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Show my \nLocation"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/getStudentInfo_switch"
+        app:layout_constraintTop_toBottomOf="@+id/getStudentInfo_switch" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

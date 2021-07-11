@@ -62,6 +62,7 @@ import com.google.firebase.database.ValueEventListener;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -85,6 +86,8 @@ public class DriverMapActivity extends FragmentActivity implements OnMapReadyCal
     Location mLastLocation;
     LocationRequest mLocationRequest;
     private GoogleMap mMap;
+
+
     LocationCallback mLocationCallback = new LocationCallback() {
         @Override
         public void onLocationResult(LocationResult locationResult) {
@@ -117,10 +120,10 @@ public class DriverMapActivity extends FragmentActivity implements OnMapReadyCal
                             e.printStackTrace();
                         }
                     }
-                    else {
-                        return;
-                    }
 
+//                    if (!getStudentsAroundStarted){
+//                        getStudentsAround();
+//                    }
                 }
 
             }
@@ -208,17 +211,11 @@ public class DriverMapActivity extends FragmentActivity implements OnMapReadyCal
                                     mShowStudentSwitch.setChecked(false);
                                 }
                             }, 2000);
-
                         }
                         getStudentsAround();
                     }
                     else {
-                        if (!markers.isEmpty()){
-                            for (Marker markerIt : markers){
-                                markerIt.remove();
-                            }
-                        }
-
+                        recreate();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -457,20 +454,20 @@ public class DriverMapActivity extends FragmentActivity implements OnMapReadyCal
     List<Marker> markers = new ArrayList<Marker>();
 
     private void getStudentsAround(){
-        //getStudentsAroundStarted = true;
+        getStudentsAroundStarted = true;
         DatabaseReference studentLocation = FirebaseDatabase.getInstance().getReference().child("studentsAvailable");
         GeoFire geoFire = new GeoFire(studentLocation);
-        GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude()), 999999999);
+        GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude()), 2000);
 
 
         geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
             @Override
             public void onKeyEntered(String key, GeoLocation location) {
 
-//                for(Marker markerIt : markers){
-//                    if(markerIt.getTag().equals(key))
-//                        return;
-//                }
+                for(Marker markerIt : markers){
+                    if(markerIt.getTag().equals(key))
+                        return;
+                }
 
                 LatLng studentLocation = new LatLng(location.latitude, location.longitude);
 
@@ -483,20 +480,33 @@ public class DriverMapActivity extends FragmentActivity implements OnMapReadyCal
 
             @Override
             public void onKeyExited(String key) {
-                for(Marker markerIt : markers){
-                    if(markerIt.getTag().equals(key)){
-                        markerIt.remove();
-                        markers.remove(markerIt);
+//                for(Marker markerIt : markers){
+//                    if(markerIt.getTag().equals(key)){
+//                    markerIt.remove();
+//                    markers.remove(markerIt);
+//                    }
+//                }
+
+                try {
+                    Iterator<Marker> itr = markers.iterator();
+                    while (itr.hasNext()){
+                        Marker markerIt = itr.next();
+                        if (markerIt.getTag().equals(key)){
+                            markerIt.remove();
+                            markers.remove(markerIt);
+                        }
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
 
             @Override
             public void onKeyMoved(String key, GeoLocation location) {
                 for(Marker markerIt : markers){
-                    //if(markerIt.getTag().equals(key)){
+                    if(markerIt.getTag().equals(key)){
                         markerIt.setPosition(new LatLng(location.latitude, location.longitude));
-                    //}
+                    }
                 }
             }
 

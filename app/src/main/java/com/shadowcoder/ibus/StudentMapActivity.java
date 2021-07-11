@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -59,14 +60,15 @@ import com.google.firebase.database.ValueEventListener;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-public class StudentMapActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+public class StudentMapActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 
     private Button mBackButton;
-    private Switch mShowStudentSwitch;
+    private Switch mShowStudentSwitch, visibleLocation_student;
 
     Location mLastLocation;
     LocationRequest mLocationRequest;
@@ -81,8 +83,58 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
     private TextView NameDriver,PlateDriver,RouteDriver,PhoneDriver, mDriverDistance;
 
     private TextView NameStudent,MatricNo_student,PhoneStudent, StudentDistance;
-    private ImageView mStudentProfileImage;
+    private ImageView mStudentProfileImage, mDriverProfileImage;
 
+    //an object used to store the student visibility state
+    DriverStudent ds = new DriverStudent();
+
+    LocationCallback mLocationCallback = new LocationCallback(){
+        @Override
+        public void onLocationResult(LocationResult locationResult) {
+            for(Location location : locationResult.getLocations()){
+                if(getApplicationContext()!=null){
+                    mLastLocation = location;
+
+                    LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
+
+                    //mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                    //mMap.animateCamera(CameraUpdateFactory.zoomTo(15));      //Default : 11
+
+                    if (ds.getIsStudentVisible()){
+                        try {
+                            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                            DatabaseReference refAvailable = FirebaseDatabase.getInstance().getReference("studentsAvailable");
+                            GeoFire geoFireAvailable = new GeoFire(refAvailable);
+
+                            geoFireAvailable.setLocation(userId, new GeoLocation(location.getLatitude(), location.getLongitude()), new GeoFire.CompletionListener() {
+                                @Override
+                                public void onComplete(String key, DatabaseError error) {
+                                    if (error != null) {
+                                        System.err.println("There was an error saving the location to GeoFire: " + error);
+                                    } else {
+                                        System.out.println("Location saved on server successfully!");
+                                    }
+                                }
+                            });
+                        } catch (Exception e) {
+                            System.out.println("User has been logout");
+                            e.printStackTrace();
+                        }
+                    }
+
+
+                    if(!getDriversAroundStarted){
+                        getDriversAround();
+                    }
+
+//                    if (!getStudentsAroundStarted){
+//                        getStudentsAround();
+//                    }
+
+                }
+            }
+        }
+    };
 
     public StudentMapActivity() {
     }
@@ -101,7 +153,11 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
 
         mBackButton = findViewById(R.id.backButtonStudent);
         mShowStudentSwitch = findViewById(R.id.getStudentInfo_switch);
+        visibleLocation_student = findViewById(R.id.showLoc_student);
 
+        //save switch state in shared preference
+        SharedPreferences sharedPreferences = getSharedPreferences("save", MODE_PRIVATE);
+        visibleLocation_student.setChecked(sharedPreferences.getBoolean("value", false));
 
         mBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,6 +165,33 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
                 Intent intent = new Intent(StudentMapActivity.this, StudentMainMenuActivity.class);
                 startActivity(intent);
                 finish();
+            }
+        });
+
+        visibleLocation_student.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+
+                    ds.setIsStudentVisible(true);
+                    connectStudent();
+                    // Creating an Editor object to edit(write to the file)
+                    SharedPreferences.Editor editor = getSharedPreferences("save", MODE_PRIVATE).edit();
+                    // Storing the key and its value as the data fetched
+                    editor.putBoolean("value", true);
+                    // Once the changes have been made,
+                    // we need to commit to apply those changes made,
+                    // otherwise, it will throw an error
+                    editor.apply();
+                }
+                else{
+
+                    ds.setIsStudentVisible(false);
+                    disconnectStudent();
+                    SharedPreferences.Editor editor = getSharedPreferences("save", MODE_PRIVATE).edit();
+                    editor.putBoolean("value", false);
+                    editor.apply();
+                }
             }
         });
 
@@ -128,13 +211,10 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
 
                         }
                         getStudentsAround();
+                        Toast.makeText(StudentMapActivity.this, "Please turn of view student to view the driver info!", Toast.LENGTH_SHORT).show();
                     }
                     else {
-                        if (!markers2.isEmpty()){
-                            for (Marker markerIt : markers2){
-                                markerIt.remove();
-                            }
-                        }
+                        recreate();
 
                     }
                 } catch (Exception e) {
@@ -166,7 +246,7 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
         getDriversAroundStarted = true;
         DatabaseReference driverLocation = FirebaseDatabase.getInstance().getReference().child("driversAvailable");
         GeoFire geoFire = new GeoFire(driverLocation);
-        GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude()), 999999999);
+        GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude()), 2000);
 
 
         geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
@@ -184,16 +264,37 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
                 mDriverMarker.setTag(key);
                 markers.add(mDriverMarker);
 
+                mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(Marker marker) {
+                        getDriverInfo((String) marker.getTag());
+                        return false;
+                    }
+                });
+
 
             }
 
             @Override
             public void onKeyExited(String key) {
-                for(Marker markerIt : markers){
-                    if(markerIt.getTag().equals(key)){
-                        markerIt.remove();
-                        markers.remove(markerIt);
+//                for(Marker markerIt : markers){
+//                    if(markerIt.getTag().equals(key)){
+//                        markerIt.remove();
+//                        markers.remove(markerIt);
+//                    }
+//                }
+
+                try {
+                    Iterator<Marker> itr = markers.iterator();
+                    while (itr.hasNext()){
+                        Marker markerIt = itr.next();
+                        if (markerIt.getTag().equals(key)){
+                            markerIt.remove();
+                            markers.remove(markerIt);
+                        }
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
 
@@ -219,30 +320,30 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
 
         });
 
-        mMap.setOnMarkerClickListener(this);
+//        mMap.setOnMarkerClickListener(this);
 
     }
 
-    @Override
-    public boolean onMarkerClick(Marker marker) {
-
-        //Retrieve the data from the marker.
-        try {
-            if (marker.equals(mDriverMarker)){
-                getDriverInfo((String) marker.getTag());
-            }
-            else if (marker.equals(mStudentMarker)){
-                getStudentInfo((String) marker.getTag()); // buat if statement kejap lagi  //DONE!!!
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Not click on bus icon");
-        }
-
-
-        return false;
-    }
+//    @Override
+//    public boolean onMarkerClick(Marker marker) {
+//
+//        //Retrieve the data from the marker.
+//        try {
+//            if (marker.equals(mDriverMarker)){
+//                getDriverInfo((String) marker.getTag());
+//            }
+//            else if(marker.equals(mStudentMarker)){
+//                getStudentInfo((String) marker.getTag()); // buat if statement kejap lagi  //DONE!!!
+//            }
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            System.out.println("Not click on bus icon");
+//        }
+//
+//
+//        return false;
+//    }
 
 
     /*-------------------------------------------- getDriverInfo -----
@@ -266,6 +367,8 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
         RouteDriver = sheetView.findViewById(R.id.route_bus_driver);
         PhoneDriver = sheetView.findViewById(R.id.phone_bus_driver);
         mDriverDistance = sheetView.findViewById(R.id.driverDistance);
+        mDriverProfileImage = sheetView.findViewById(R.id.image_bus_driver);
+
 
         getDriverLocation(driverFoundID);
 
@@ -289,9 +392,9 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
                         RouteDriver.setText(dataSnapshot.child("route").getValue().toString());
                     }
 
-//                    if(dataSnapshot.child("profileImageUrl").getValue()!=null){
-//                        Glide.with(getApplication()).load(dataSnapshot.child("profileImageUrl").getValue().toString()).into(mDriverProfileImage);
-//                    }
+                    if(dataSnapshot.child("profileImageUrl").getValue()!=null){
+                        Glide.with(getApplication()).load(dataSnapshot.child("profileImageUrl").getValue().toString()).into(mDriverProfileImage);
+                    }
 
 
                 }
@@ -450,44 +553,6 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
-    LocationCallback mLocationCallback = new LocationCallback(){
-        @Override
-        public void onLocationResult(LocationResult locationResult) {
-            for(Location location : locationResult.getLocations()){
-                if(getApplicationContext()!=null){
-                    mLastLocation = location;
-
-                    LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
-
-                    //mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                    //mMap.animateCamera(CameraUpdateFactory.zoomTo(15));      //Default : 11
-
-                    try {
-                        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                        DatabaseReference refAvailable = FirebaseDatabase.getInstance().getReference("studentsAvailable");
-                        GeoFire geoFireAvailable = new GeoFire(refAvailable);
-
-                        geoFireAvailable.setLocation(userId, new GeoLocation(location.getLatitude(), location.getLongitude()), new GeoFire.CompletionListener() {
-                            @Override
-                            public void onComplete(String key, DatabaseError error) {
-                                if (error != null) {
-                                    System.err.println("There was an error saving the location to GeoFire: " + error);
-                                } else {
-                                    System.out.println("Location saved on server successfully!");
-                                }
-                            }
-                        });
-                    } catch (Exception e) {
-                        System.out.println("User has been logout");
-                        e.printStackTrace();
-                    }
-
-                    if(!getDriversAroundStarted)
-                        getDriversAround();
-                }
-            }
-        }
-    };
 
     private void checkLocationPermission() {
         if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
@@ -526,6 +591,12 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
                 break;
             }
         }
+    }
+
+    private void connectStudent(){
+        checkLocationPermission();
+        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
+        mMap.setMyLocationEnabled(true);
     }
 
     private void disconnectStudent() {
@@ -578,20 +649,20 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
     List<Marker> markers2 = new ArrayList<Marker>();
 
     private void getStudentsAround(){
-        //getStudentsAroundStarted = true;
+        getStudentsAroundStarted = true;
         DatabaseReference studentLocation = FirebaseDatabase.getInstance().getReference().child("studentsAvailable");
         GeoFire geoFire = new GeoFire(studentLocation);
-        GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude()), 999999999);
+        GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude()), 2000);
 
 
         geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
             @Override
             public void onKeyEntered(String key, GeoLocation location) {
 
-//                for(Marker markerIt : markers){
-//                    if(markerIt.getTag().equals(key))
-//                        return;
-//                }
+                for(Marker markerIt2 : markers2){
+                    if(markerIt2.getTag().equals(key))
+                        return;
+                }
 
                 LatLng studentLocation = new LatLng(location.latitude, location.longitude);
 
@@ -599,25 +670,47 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
                 mStudentMarker.setTag(key);
                 markers2.add(mStudentMarker);
 
+                mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(Marker marker) {
+                        getStudentInfo((String) marker.getTag());
+                        return false;
+                    }
+                });
 
             }
 
             @Override
             public void onKeyExited(String key) {
-                for(Marker markerIt : markers2){
-                    if(markerIt.getTag().equals(key)){
-                        markerIt.remove();
-                        markers2.remove(markerIt);
+
+//                for(Marker markerIt2 : markers2){
+//                    if(markerIt2.getTag().equals(key)){
+//                        markerIt2.remove();
+//                        markers2.remove(markerIt2);
+//                    }
+//                }
+                try {
+                    Iterator<Marker> itr = markers2.iterator();
+                    while (itr.hasNext()){
+                        Marker markerIt2 = itr.next();
+                        if (markerIt2.getTag().equals(key)){
+                            markerIt2.remove();
+                            markers2.remove(markerIt2);
+                        }
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
+
+
             }
 
             @Override
             public void onKeyMoved(String key, GeoLocation location) {
-                for(Marker markerIt : markers2){
-                    //if(markerIt.getTag().equals(key)){
-                    markerIt.setPosition(new LatLng(location.latitude, location.longitude));
-                    //}
+                for(Marker markerIt2 : markers2){
+                    if(markerIt2.getTag().equals(key)){
+                        markerIt2.setPosition(new LatLng(location.latitude, location.longitude));
+                    }
                 }
             }
 
@@ -634,7 +727,7 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
 
         });
 
-        mMap.setOnMarkerClickListener(this);
+//        mMap.setOnMarkerClickListener(this);
 
     }
 
@@ -725,7 +818,7 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
 
                     float distance = loc1.distanceTo(loc2)/1000;
 
-                    StudentDistance.setText(String.format("%.4g%n",distance));
+                    StudentDistance.setText(String.format("%.4g%n",distance ));
 
                 }
             }

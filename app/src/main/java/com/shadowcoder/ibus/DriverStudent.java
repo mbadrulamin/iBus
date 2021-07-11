@@ -4,6 +4,7 @@ public class DriverStudent {
     private static Boolean isWorking = false;
     private static Boolean isDriver = false;
     private static Boolean isStudent = false;
+    private static Boolean isStudentVisible = false;
 
     public DriverStudent() {
 
@@ -31,5 +32,13 @@ public class DriverStudent {
 
     public void setIsStudent(Boolean isStudent) {
         DriverStudent.isStudent = isStudent;
+    }
+
+    public Boolean getIsStudentVisible() {
+        return isStudentVisible;
+    }
+
+    public void setIsStudentVisible(Boolean isStudentVisible) {
+        DriverStudent.isStudentVisible = isStudentVisible;
     }
 }

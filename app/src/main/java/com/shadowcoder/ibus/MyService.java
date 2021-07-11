@@ -124,6 +124,17 @@ public class MyService extends Service {
         }
 
         if (ds.getIsStudent()){
+            ds.setIsStudentVisible(false);
+            //save switch state in shared preference
+            SharedPreferences sharedPreferences = getSharedPreferences("save", MODE_PRIVATE);
+            // Creating an Editor object to edit(write to the file)
+            SharedPreferences.Editor editor = getSharedPreferences("save", MODE_PRIVATE).edit();
+            // Storing the key and its value as the data fetched
+            editor.putBoolean("value", false);
+            // Once the changes have been made,
+            // we need to commit to apply those changes made,
+            // otherwise, it will throw an error
+            editor.apply();
             DatabaseReference refStudent = FirebaseDatabase.getInstance().getReference("studentsAvailable");
 
             GeoFire geoFireStudent = new GeoFire(refStudent);
@@ -180,6 +191,17 @@ public class MyService extends Service {
         }
 
         if (ds.getIsStudent()){
+            ds.setIsStudentVisible(false);
+            //save switch state in shared preference
+            SharedPreferences sharedPreferences = getSharedPreferences("save", MODE_PRIVATE);
+            // Creating an Editor object to edit(write to the file)
+            SharedPreferences.Editor editor = getSharedPreferences("save", MODE_PRIVATE).edit();
+            // Storing the key and its value as the data fetched
+            editor.putBoolean("value", false);
+            // Once the changes have been made,
+            // we need to commit to apply those changes made,
+            // otherwise, it will throw an error
+            editor.apply();
             DatabaseReference refStudent = FirebaseDatabase.getInstance().getReference("studentsAvailable");
 
             GeoFire geoFireStudent = new GeoFire(refStudent);
