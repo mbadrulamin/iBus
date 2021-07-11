@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/bottomSheetContainerStudent"
+    android:id="@+id/bottomSheetgetStudentInfo"
     android:background="@drawable/bottom_sheet_background">
 
     <View
@@ -57,7 +57,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Route of Bus :"
+        android:text="Matric No :"
         android:textColor="?android:textColorPrimary"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -100,12 +100,35 @@
         app:layout_constraintTop_toTopOf="@+id/phoneView_student" />
 
     <TextView
+        android:id="@+id/distanceView_student"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Distance :"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/phoneView_student"
+        app:layout_constraintTop_toBottomOf="@+id/phoneView_student" />
+
+    <TextView
+        android:id="@+id/getDistance_student"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/distanceView_student"
+        app:layout_constraintTop_toTopOf="@+id/distanceView_student" />
+
+    <TextView
         android:id="@+id/space_bottomSheet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/phoneView_student" />
+        app:layout_constraintTop_toBottomOf="@+id/distanceView_student" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

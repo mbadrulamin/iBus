@@ -9,6 +9,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -23,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class FeedbackActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -60,6 +62,10 @@ public class FeedbackActivity extends AppCompatActivity implements NavigationVie
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if(!validateEmail() | !validateName() | !validateFeedback()){
+                    return;
+                }
                 saveUserFeedBack();
                 Intent intent = new Intent(FeedbackActivity.this, HomeActivity.class);
                 startActivity(intent);
@@ -84,6 +90,41 @@ public class FeedbackActivity extends AppCompatActivity implements NavigationVie
         mFeedBackDatabase.updateChildren(userFeedback);
         finish();
 
+    }
+
+    private Boolean validateEmail() {
+        String emailInput = mEmail.getText().toString();
+        if (emailInput.isEmpty()) {
+            mEmail.setError("Field cannot be empty");
+            return false;
+        }
+        else {
+            mEmail.setError(null);
+            return true;
+        }
+    }
+
+
+    private Boolean validateName() {
+        String val = mName.getText().toString();
+        if (val.isEmpty()) {
+            mName.setError("Field cannot be empty");
+            return false;
+        } else {
+            mName.setError(null);
+            return true;
+        }
+    }
+
+    private Boolean validateFeedback() {
+        String feedback = mFeedback.getText().toString();
+        if (feedback.isEmpty()) {
+            mFeedback.setError("Field cannot be empty");
+            return false;
+        } else {
+            mFeedback.setError(null);
+            return true;
+        }
     }
 
 

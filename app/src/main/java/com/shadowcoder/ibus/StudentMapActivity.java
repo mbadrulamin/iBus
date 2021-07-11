@@ -11,11 +11,15 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +28,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import com.bumptech.glide.Glide;
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
@@ -44,6 +49,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -60,6 +66,7 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
     private GoogleMap mMap;
 
     private Button mBackButton;
+    private Switch mShowStudentSwitch;
 
     Location mLastLocation;
     LocationRequest mLocationRequest;
@@ -68,11 +75,13 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
 
     private SupportMapFragment mapFragment;
 
-    private Marker mDriverMarker;
+    private Marker mDriverMarker, mStudentMarker;
 
     private BottomSheetDialog bottomSheetDialog;
     private TextView NameDriver,PlateDriver,RouteDriver,PhoneDriver, mDriverDistance;
 
+    private TextView NameStudent,MatricNo_student,PhoneStudent, StudentDistance;
+    private ImageView mStudentProfileImage;
 
 
     public StudentMapActivity() {
@@ -91,6 +100,7 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
 
 
         mBackButton = findViewById(R.id.backButtonStudent);
+        mShowStudentSwitch = findViewById(R.id.getStudentInfo_switch);
 
 
         mBackButton.setOnClickListener(new View.OnClickListener() {
@@ -99,6 +109,37 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
                 Intent intent = new Intent(StudentMapActivity.this, StudentMainMenuActivity.class);
                 startActivity(intent);
                 finish();
+            }
+        });
+
+        mShowStudentSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                try {
+                    if (isChecked){
+                        if (mLastLocation == null){
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mShowStudentSwitch.setChecked(false);
+                                }
+                            }, 2000);
+
+                        }
+                        getStudentsAround();
+                    }
+                    else {
+                        if (!markers2.isEmpty()){
+                            for (Marker markerIt : markers2){
+                                markerIt.remove();
+                            }
+                        }
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -187,7 +228,13 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
 
         //Retrieve the data from the marker.
         try {
-            getDriverInfo((String) marker.getTag());
+            if (marker.equals(mDriverMarker)){
+                getDriverInfo((String) marker.getTag());
+            }
+            else if (marker.equals(mStudentMarker)){
+                getStudentInfo((String) marker.getTag()); // buat if statement kejap lagi  //DONE!!!
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Not click on bus icon");
@@ -234,7 +281,7 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
                         PhoneDriver.setText(dataSnapshot.child("phone").getValue().toString());
 
                     }
-                    if(dataSnapshot.child("car")!=null){
+                    if(dataSnapshot.child("busRegistrationNo")!=null){
                         PlateDriver.setText(dataSnapshot.child("busRegistrationNo").getValue().toString());
 
                     }
@@ -414,6 +461,27 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
 
                     //mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
                     //mMap.animateCamera(CameraUpdateFactory.zoomTo(15));      //Default : 11
+
+                    try {
+                        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                        DatabaseReference refAvailable = FirebaseDatabase.getInstance().getReference("studentsAvailable");
+                        GeoFire geoFireAvailable = new GeoFire(refAvailable);
+
+                        geoFireAvailable.setLocation(userId, new GeoLocation(location.getLatitude(), location.getLongitude()), new GeoFire.CompletionListener() {
+                            @Override
+                            public void onComplete(String key, DatabaseError error) {
+                                if (error != null) {
+                                    System.err.println("There was an error saving the location to GeoFire: " + error);
+                                } else {
+                                    System.out.println("Location saved on server successfully!");
+                                }
+                            }
+                        });
+                    } catch (Exception e) {
+                        System.out.println("User has been logout");
+                        e.printStackTrace();
+                    }
+
                     if(!getDriversAroundStarted)
                         getDriversAround();
                 }
@@ -460,11 +528,213 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
         }
     }
 
+    private void disconnectStudent() {
 
-    @Override
-    protected void onStop() {
-        super.onStop();
+        if(mFusedLocationClient != null){
+            mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+        }
 
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("studentsAvailable");
+
+        GeoFire geoFire = new GeoFire(ref);
+
+        geoFire.removeLocation(userId, new GeoFire.CompletionListener() {
+            @Override
+            public void onComplete(String key, DatabaseError error) {
+                if (error != null) {
+                    System.err.println("There was an error saving the location to GeoFire: " + error);
+                } else {
+                    System.out.println("Location saved on server successfully!");
+                }
+            }
+        });
+    }
+
+
+//    @Override
+//    protected void onStop() {
+//        disconnectStudent();
+//        super.onStop();
+//
+//    }
+
+
+           /*-------------------------------------------- Map specific functions -----
+    |  Function(s) getStudentsAround
+    |
+    |  Purpose:  Get's most updated drivers location and it's always checking for movements.
+    |
+    |  Note:
+    |	   Even tho we used geofire to push the location of the driver we can use a normal
+    |      Listener to get it's location with no problem.
+    |
+    |      0 -> Latitude
+    |      1 -> Longitudde
+    |
+    *-------------------------------------------------------------------*/
+
+    boolean getStudentsAroundStarted = false;
+    List<Marker> markers2 = new ArrayList<Marker>();
+
+    private void getStudentsAround(){
+        //getStudentsAroundStarted = true;
+        DatabaseReference studentLocation = FirebaseDatabase.getInstance().getReference().child("studentsAvailable");
+        GeoFire geoFire = new GeoFire(studentLocation);
+        GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude()), 999999999);
+
+
+        geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
+            @Override
+            public void onKeyEntered(String key, GeoLocation location) {
+
+//                for(Marker markerIt : markers){
+//                    if(markerIt.getTag().equals(key))
+//                        return;
+//                }
+
+                LatLng studentLocation = new LatLng(location.latitude, location.longitude);
+
+                mStudentMarker = mMap.addMarker(new MarkerOptions().position(studentLocation).icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_student_foreground)));
+                mStudentMarker.setTag(key);
+                markers2.add(mStudentMarker);
+
+
+            }
+
+            @Override
+            public void onKeyExited(String key) {
+                for(Marker markerIt : markers2){
+                    if(markerIt.getTag().equals(key)){
+                        markerIt.remove();
+                        markers2.remove(markerIt);
+                    }
+                }
+            }
+
+            @Override
+            public void onKeyMoved(String key, GeoLocation location) {
+                for(Marker markerIt : markers2){
+                    //if(markerIt.getTag().equals(key)){
+                    markerIt.setPosition(new LatLng(location.latitude, location.longitude));
+                    //}
+                }
+            }
+
+            @Override
+            public void onGeoQueryReady() {
+            }
+
+            @Override
+            public void onGeoQueryError(DatabaseError error) {
+
+            }
+
+
+
+        });
+
+        mMap.setOnMarkerClickListener(this);
+
+    }
+
+
+    /*-------------------------------------------- getStudentInfo -----
+|  Function(s) getStudentInfo
+|
+|  Purpose:  Get all the user information that we can get from the user's database.
+|
+|  Note: --
+|
+*-------------------------------------------------------------------*/
+    private void getStudentInfo(String studentFoundID){
+
+        DatabaseReference mStudentDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child("Students").child(studentFoundID);
+
+
+        bottomSheetDialog = new BottomSheetDialog(StudentMapActivity.this,R.style.BottomSheetTheme);
+        View sheetView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.bottom_sheet_get_student_info, (ViewGroup) findViewById(R.id.bottomSheetgetStudentInfo));
+
+        NameStudent = sheetView.findViewById(R.id.getName_student);
+        MatricNo_student = sheetView.findViewById(R.id.getMatricNo_student);
+        PhoneStudent = sheetView.findViewById(R.id.getPhone_student);
+        mStudentProfileImage = sheetView.findViewById(R.id.getImage_student);
+        StudentDistance = sheetView.findViewById(R.id.getDistance_student);
+
+        getStudentLocation(studentFoundID);
+
+        mStudentDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists() && dataSnapshot.getChildrenCount()>0){
+                    if(dataSnapshot.child("name")!=null){
+                        NameStudent.setText(dataSnapshot.child("name").getValue().toString());
+
+                    }
+                    if(dataSnapshot.child("phone")!=null){
+                        PhoneStudent.setText(dataSnapshot.child("phone").getValue().toString());
+
+                    }
+                    if(dataSnapshot.child("matricNo")!=null){
+                        MatricNo_student.setText(dataSnapshot.child("matricNo").getValue().toString());
+
+                    }
+
+                    if(dataSnapshot.child("profileImageUrl").getValue()!=null){
+                        Glide.with(getApplication()).load(dataSnapshot.child("profileImageUrl").getValue().toString()).into(mStudentProfileImage);
+                    }
+
+
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+        bottomSheetDialog.setContentView(sheetView);
+        bottomSheetDialog.show();
+    }
+
+    private void getStudentLocation(String studentFoundID){
+        DatabaseReference studentLocationRef = FirebaseDatabase.getInstance().getReference().child("studentsAvailable").child(studentFoundID).child("l");
+        studentLocationRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    List<Object> map = (List<Object>) dataSnapshot.getValue();
+                    double locationLat = 0;
+                    double locationLng = 0;
+                    if (map.get(0) != null){
+                        locationLat = Double.parseDouble(map.get(0).toString());
+                    }
+                    if (map.get(1) != null){
+                        locationLng = Double.parseDouble(map.get(1).toString());
+                    }
+                    LatLng studentLocation = new LatLng(locationLat, locationLng);
+                    LatLng currUserLocation = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+
+
+                    Location loc1 = new Location("");
+                    loc1.setLatitude(studentLocation.latitude);
+                    loc1.setLongitude(studentLocation.longitude);
+
+                    Location loc2 = new Location("");
+                    loc2.setLatitude(currUserLocation.latitude);
+                    loc2.setLongitude(currUserLocation.longitude);
+
+                    float distance = loc1.distanceTo(loc2)/1000;
+
+                    StudentDistance.setText(String.format("%.4g%n",distance ) + " KM");
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
     }
 
     @Override

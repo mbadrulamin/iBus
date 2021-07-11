@@ -22,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class MyService extends Service {
     
     DriverStudent ds = new DriverStudent();
+    String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -93,34 +94,54 @@ public class MyService extends Service {
     public void onTaskRemoved(Intent rootIntent) {
         super.onTaskRemoved(rootIntent);
 
-        DriverStudent ds = new DriverStudent();
-        ds.setWorking(false);
-        //save switch state in shared preference
-        SharedPreferences sharedPreferences = getSharedPreferences("save", MODE_PRIVATE);
-        // Creating an Editor object to edit(write to the file)
-        SharedPreferences.Editor editor = getSharedPreferences("save", MODE_PRIVATE).edit();
-        // Storing the key and its value as the data fetched
-        editor.putBoolean("value", false);
-        // Once the changes have been made,
-        // we need to commit to apply those changes made,
-        // otherwise, it will throw an error
-        editor.apply();
+        if (ds.getIsDriver()){
+            ds.setWorking(false);
+            //save switch state in shared preference
+            SharedPreferences sharedPreferences = getSharedPreferences("save", MODE_PRIVATE);
+            // Creating an Editor object to edit(write to the file)
+            SharedPreferences.Editor editor = getSharedPreferences("save", MODE_PRIVATE).edit();
+            // Storing the key and its value as the data fetched
+            editor.putBoolean("value", false);
+            // Once the changes have been made,
+            // we need to commit to apply those changes made,
+            // otherwise, it will throw an error
+            editor.apply();
 
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("driversAvailable");
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("driversAvailable");
 
-        GeoFire geoFire = new GeoFire(ref);
+            GeoFire geoFire = new GeoFire(ref);
 
-        geoFire.removeLocation(userId, new GeoFire.CompletionListener() {
-            @Override
-            public void onComplete(String key, DatabaseError error) {
-                if (error != null) {
-                    System.err.println("There was an error saving the location to GeoFire: " + error);
-                } else {
-                    System.out.println("Location saved on server successfully!");
+            geoFire.removeLocation(userId, new GeoFire.CompletionListener() {
+                @Override
+                public void onComplete(String key, DatabaseError error) {
+                    if (error != null) {
+                        System.err.println("There was an error saving the location to GeoFire: " + error);
+                    } else {
+                        System.out.println("Location saved on server successfully!");
+                    }
                 }
-            }
-        });
+            });
+        }
+
+        if (ds.getIsStudent()){
+            DatabaseReference refStudent = FirebaseDatabase.getInstance().getReference("studentsAvailable");
+
+            GeoFire geoFireStudent = new GeoFire(refStudent);
+
+            geoFireStudent.removeLocation(userId, new GeoFire.CompletionListener() {
+                @Override
+                public void onComplete(String key, DatabaseError error) {
+                    if (error != null) {
+                        System.err.println("There was an error saving the location to GeoFire: " + error);
+                    } else {
+                        System.out.println("Location saved on server successfully!");
+                    }
+                }
+            });
+        }
+
+
+
 
         stopForeground(true);
         stopSelf();
@@ -129,32 +150,51 @@ public class MyService extends Service {
     @Override
     public void onDestroy() {
 
-        //save switch state in shared preference
-        SharedPreferences sharedPreferences = getSharedPreferences("save", MODE_PRIVATE);
-        // Creating an Editor object to edit(write to the file)
-        SharedPreferences.Editor editor = getSharedPreferences("save", MODE_PRIVATE).edit();
-        // Storing the key and its value as the data fetched
-        editor.putBoolean("value", false);
-        // Once the changes have been made,
-        // we need to commit to apply those changes made,
-        // otherwise, it will throw an error
-        editor.apply();
+        if (ds.getIsDriver()){
+            ds.setWorking(false);
+            //save switch state in shared preference
+            SharedPreferences sharedPreferences = getSharedPreferences("save", MODE_PRIVATE);
+            // Creating an Editor object to edit(write to the file)
+            SharedPreferences.Editor editor = getSharedPreferences("save", MODE_PRIVATE).edit();
+            // Storing the key and its value as the data fetched
+            editor.putBoolean("value", false);
+            // Once the changes have been made,
+            // we need to commit to apply those changes made,
+            // otherwise, it will throw an error
+            editor.apply();
 
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("driversAvailable");
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("driversAvailable");
 
-        GeoFire geoFire = new GeoFire(ref);
+            GeoFire geoFire = new GeoFire(ref);
 
-        geoFire.removeLocation(userId, new GeoFire.CompletionListener() {
-            @Override
-            public void onComplete(String key, DatabaseError error) {
-                if (error != null) {
-                    System.err.println("There was an error saving the location to GeoFire: " + error);
-                } else {
-                    System.out.println("Location saved on server successfully!");
+            geoFire.removeLocation(userId, new GeoFire.CompletionListener() {
+                @Override
+                public void onComplete(String key, DatabaseError error) {
+                    if (error != null) {
+                        System.err.println("There was an error saving the location to GeoFire: " + error);
+                    } else {
+                        System.out.println("Location saved on server successfully!");
+                    }
                 }
-            }
-        });
+            });
+        }
+
+        if (ds.getIsStudent()){
+            DatabaseReference refStudent = FirebaseDatabase.getInstance().getReference("studentsAvailable");
+
+            GeoFire geoFireStudent = new GeoFire(refStudent);
+
+            geoFireStudent.removeLocation(userId, new GeoFire.CompletionListener() {
+                @Override
+                public void onComplete(String key, DatabaseError error) {
+                    if (error != null) {
+                        System.err.println("There was an error saving the location to GeoFire: " + error);
+                    } else {
+                        System.out.println("Location saved on server successfully!");
+                    }
+                }
+            });
+        }
 
         stopForeground(true);
         stopSelf();

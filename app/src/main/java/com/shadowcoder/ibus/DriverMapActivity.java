@@ -12,8 +12,11 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -31,6 +34,8 @@ import androidx.fragment.app.FragmentActivity;
 import com.bumptech.glide.Glide;
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
+import com.firebase.geofire.GeoQuery;
+import com.firebase.geofire.GeoQueryEventListener;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -43,8 +48,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -52,9 +59,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
-public class DriverMapActivity extends FragmentActivity implements OnMapReadyCallback {
+public class DriverMapActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private FusedLocationProviderClient mFusedLocationClient;
     private SupportMapFragment mapFragment;
@@ -63,7 +74,10 @@ public class DriverMapActivity extends FragmentActivity implements OnMapReadyCal
     private LinearLayout mStudentInfo;
     private ImageView mStudentProfileImage;
     private TextView mStudentName, mStudentPhone;
-    private Switch mWorkingSwitch;
+    private Switch mWorkingSwitch, mShowStudentSwitch;
+    private Marker mStudentMarker;
+    private BottomSheetDialog bottomSheetDialog;
+    private TextView NameStudent,MatricNo_student,PhoneStudent, StudentDistance;
 
     //an object used to store the driver working state
     DriverStudent dw = new DriverStudent();
@@ -136,6 +150,7 @@ public class DriverMapActivity extends FragmentActivity implements OnMapReadyCal
         mStudentPhone = findViewById(R.id.customerPhone);
         mBackButton = findViewById(R.id.backButtonDriver);
         mWorkingSwitch = findViewById(R.id.workingSwitch);
+        mShowStudentSwitch = findViewById(R.id.getStudent_switch);
 
 
 
@@ -179,6 +194,40 @@ public class DriverMapActivity extends FragmentActivity implements OnMapReadyCal
                 }
             }
         });
+
+        mShowStudentSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                try {
+                    if (isChecked){
+                        if (mLastLocation == null){
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mShowStudentSwitch.setChecked(false);
+                                }
+                            }, 2000);
+
+                        }
+                        getStudentsAround();
+                    }
+                    else {
+                        if (!markers.isEmpty()){
+                            for (Marker markerIt : markers){
+                                markerIt.remove();
+                            }
+                        }
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
+
 
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -388,14 +437,199 @@ public class DriverMapActivity extends FragmentActivity implements OnMapReadyCal
         });
     }
 
+    
+    
+          /*-------------------------------------------- Map specific functions -----
+    |  Function(s) getStudentsAround
+    |
+    |  Purpose:  Get's most updated drivers location and it's always checking for movements.
+    |
+    |  Note:
+    |	   Even tho we used geofire to push the location of the driver we can use a normal
+    |      Listener to get it's location with no problem.
+    |
+    |      0 -> Latitude
+    |      1 -> Longitudde
+    |
+    *-------------------------------------------------------------------*/
 
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        if (!driverIsLoggingOut){
-//            disconnectDriver();
-//        }
-//    }
+    boolean getStudentsAroundStarted = false;
+    List<Marker> markers = new ArrayList<Marker>();
+
+    private void getStudentsAround(){
+        //getStudentsAroundStarted = true;
+        DatabaseReference studentLocation = FirebaseDatabase.getInstance().getReference().child("studentsAvailable");
+        GeoFire geoFire = new GeoFire(studentLocation);
+        GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude()), 999999999);
+
+
+        geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
+            @Override
+            public void onKeyEntered(String key, GeoLocation location) {
+
+//                for(Marker markerIt : markers){
+//                    if(markerIt.getTag().equals(key))
+//                        return;
+//                }
+
+                LatLng studentLocation = new LatLng(location.latitude, location.longitude);
+
+                mStudentMarker = mMap.addMarker(new MarkerOptions().position(studentLocation).icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_student_foreground)));
+                mStudentMarker.setTag(key);
+                markers.add(mStudentMarker);
+
+
+            }
+
+            @Override
+            public void onKeyExited(String key) {
+                for(Marker markerIt : markers){
+                    if(markerIt.getTag().equals(key)){
+                        markerIt.remove();
+                        markers.remove(markerIt);
+                    }
+                }
+            }
+
+            @Override
+            public void onKeyMoved(String key, GeoLocation location) {
+                for(Marker markerIt : markers){
+                    //if(markerIt.getTag().equals(key)){
+                        markerIt.setPosition(new LatLng(location.latitude, location.longitude));
+                    //}
+                }
+            }
+
+            @Override
+            public void onGeoQueryReady() {
+            }
+
+            @Override
+            public void onGeoQueryError(DatabaseError error) {
+
+            }
+
+
+
+        });
+
+        mMap.setOnMarkerClickListener(this);
+
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+
+        //Retrieve the data from the marker.
+        try {
+            getStudentInfo((String) marker.getTag());
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Not click on bus icon");
+        }
+
+
+        return false;
+    }
+
+
+    /*-------------------------------------------- getStudentInfo -----
+|  Function(s) getStudentInfo
+|
+|  Purpose:  Get all the user information that we can get from the user's database.
+|
+|  Note: --
+|
+*-------------------------------------------------------------------*/
+    private void getStudentInfo(String studentFoundID){
+
+        DatabaseReference mStudentDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child("Students").child(studentFoundID);
+
+
+        bottomSheetDialog = new BottomSheetDialog(DriverMapActivity.this,R.style.BottomSheetTheme);
+        View sheetView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.bottom_sheet_get_student_info, (ViewGroup) findViewById(R.id.bottomSheetgetStudentInfo));
+
+        NameStudent = sheetView.findViewById(R.id.getName_student);
+        MatricNo_student = sheetView.findViewById(R.id.getMatricNo_student);
+        PhoneStudent = sheetView.findViewById(R.id.getPhone_student);
+        mStudentProfileImage = sheetView.findViewById(R.id.getImage_student);
+        StudentDistance = sheetView.findViewById(R.id.getDistance_student);
+
+        getStudentLocation(studentFoundID);
+
+        mStudentDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists() && dataSnapshot.getChildrenCount()>0){
+                    if(dataSnapshot.child("name")!=null){
+                        NameStudent.setText(dataSnapshot.child("name").getValue().toString());
+
+                    }
+                    if(dataSnapshot.child("phone")!=null){
+                        PhoneStudent.setText(dataSnapshot.child("phone").getValue().toString());
+
+                    }
+                    if(dataSnapshot.child("matricNo")!=null){
+                        MatricNo_student.setText(dataSnapshot.child("matricNo").getValue().toString());
+
+                    }
+
+                    if(dataSnapshot.child("profileImageUrl").getValue()!=null){
+                        Glide.with(getApplication()).load(dataSnapshot.child("profileImageUrl").getValue().toString()).into(mStudentProfileImage);
+                    }
+
+
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+        bottomSheetDialog.setContentView(sheetView);
+        bottomSheetDialog.show();
+    }
+
+    private void getStudentLocation(String studentFoundID){
+        DatabaseReference studentLocationRef = FirebaseDatabase.getInstance().getReference().child("studentsAvailable").child(studentFoundID).child("l");
+        studentLocationRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    List<Object> map = (List<Object>) dataSnapshot.getValue();
+                    double locationLat = 0;
+                    double locationLng = 0;
+                    if (map.get(0) != null){
+                        locationLat = Double.parseDouble(map.get(0).toString());
+                    }
+                    if (map.get(1) != null){
+                        locationLng = Double.parseDouble(map.get(1).toString());
+                    }
+                    LatLng studentLocation = new LatLng(locationLat, locationLng);
+                    LatLng driverLocation = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+
+
+                    Location loc1 = new Location("");
+                    loc1.setLatitude(studentLocation.latitude);
+                    loc1.setLongitude(studentLocation.longitude);
+
+                    Location loc2 = new Location("");
+                    loc2.setLatitude(driverLocation.latitude);
+                    loc2.setLongitude(driverLocation.longitude);
+
+                    float distance = loc1.distanceTo(loc2)/1000;
+
+                    StudentDistance.setText(String.format("%.4g%n",distance));
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError error) {
+
+            }
+        });
+    }
 
     @Override
     public void onBackPressed() {
