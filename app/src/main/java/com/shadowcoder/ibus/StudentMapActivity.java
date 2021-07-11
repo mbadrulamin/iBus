@@ -257,7 +257,12 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
                 mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     @Override
                     public boolean onMarkerClick(Marker marker) {
-                        getDriverInfo((String) marker.getTag());
+                        try {
+                            getDriverInfo((String) marker.getTag());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
                         return false;
                     }
                 });
@@ -663,7 +668,12 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
                 mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     @Override
                     public boolean onMarkerClick(Marker marker) {
-                        getStudentInfo((String) marker.getTag());
+                        try {
+                            getStudentInfo((String) marker.getTag());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
                         return false;
                     }
                 });
