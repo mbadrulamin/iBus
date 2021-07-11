@@ -67,7 +67,6 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
 
     private GoogleMap mMap;
 
-    private Button mBackButton;
     private Switch mShowStudentSwitch, visibleLocation_student;
 
     Location mLastLocation;
@@ -151,7 +150,6 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
         mapFragment.getMapAsync(this);
 
 
-        mBackButton = findViewById(R.id.backButtonStudent);
         mShowStudentSwitch = findViewById(R.id.getStudentInfo_switch);
         visibleLocation_student = findViewById(R.id.showLoc_student);
 
@@ -159,14 +157,6 @@ public class StudentMapActivity extends FragmentActivity implements OnMapReadyCa
         SharedPreferences sharedPreferences = getSharedPreferences("save", MODE_PRIVATE);
         visibleLocation_student.setChecked(sharedPreferences.getBoolean("value", false));
 
-        mBackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(StudentMapActivity.this, StudentMainMenuActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
 
         visibleLocation_student.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

@@ -6,16 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".StudentMapActivity">
 
-    <Button
-        android:id="@+id/backButtonStudent"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/ic_arrow_back"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <fragment
 
         android:id="@+id/map"
@@ -29,19 +19,20 @@
         android:id="@+id/getStudentInfo_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="64dp"
         android:text="View \nStudent"
         android:textColor="@color/black"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/backButtonStudent"
-        app:layout_constraintTop_toBottomOf="@+id/backButtonStudent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Switch
         android:id="@+id/showLoc_student"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Show my \nLocation"
+        android:text="Share my \nLocation"
         android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/getStudentInfo_switch"

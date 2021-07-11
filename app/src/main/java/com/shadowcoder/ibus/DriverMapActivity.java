@@ -70,11 +70,11 @@ public class DriverMapActivity extends FragmentActivity implements OnMapReadyCal
 
     private FusedLocationProviderClient mFusedLocationClient;
     private SupportMapFragment mapFragment;
-    private Button mBackButton;
+
     private String studentId = "";
-    private LinearLayout mStudentInfo;
+
     private ImageView mStudentProfileImage;
-    private TextView mStudentName, mStudentPhone;
+
     private Switch mWorkingSwitch, mShowStudentSwitch;
     private Marker mStudentMarker;
     private BottomSheetDialog bottomSheetDialog;
@@ -145,13 +145,7 @@ public class DriverMapActivity extends FragmentActivity implements OnMapReadyCal
         mapFragment.getMapAsync(this);
 
 
-        mStudentInfo = findViewById(R.id.customerInfo);
 
-        mStudentProfileImage = findViewById(R.id.customerProfileImage);
-
-        mStudentName = findViewById(R.id.customerName);
-        mStudentPhone = findViewById(R.id.customerPhone);
-        mBackButton = findViewById(R.id.backButtonDriver);
         mWorkingSwitch = findViewById(R.id.workingSwitch);
         mShowStudentSwitch = findViewById(R.id.getStudent_switch);
 
@@ -162,14 +156,6 @@ public class DriverMapActivity extends FragmentActivity implements OnMapReadyCal
         mWorkingSwitch.setChecked(sharedPreferences.getBoolean("value", false));
 
 
-        mBackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(DriverMapActivity.this, DriverMainMenuActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
 
         mWorkingSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -377,32 +363,6 @@ public class DriverMapActivity extends FragmentActivity implements OnMapReadyCal
         }
     }
 
-
-    private void getAssignedStudentInfo() {
-        mStudentInfo.setVisibility(View.VISIBLE);
-        DatabaseReference mStudentDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child("Customers").child(studentId);
-        mStudentDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists() && dataSnapshot.getChildrenCount() > 0) {
-                    Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
-                    if (map.get("name") != null) {
-                        mStudentName.setText(map.get("name").toString());
-                    }
-                    if (map.get("phone") != null) {
-                        mStudentPhone.setText(map.get("phone").toString());
-                    }
-                    if (map.get("profileImageUrl") != null) {
-                        Glide.with(getApplication()).load(map.get("profileImageUrl").toString()).into(mStudentProfileImage);
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
-    }
 
 
     private void connectDriver(){
