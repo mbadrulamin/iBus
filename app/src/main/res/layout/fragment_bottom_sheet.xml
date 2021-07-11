@@ -7,12 +7,33 @@
     android:id="@+id/bottomSheetContainerStudent"
     android:background="@drawable/bottom_sheet_background">
 
+    <View
+        android:id="@+id/view_borderDriver"
+        android:layout_width="115dp"
+        android:layout_height="115dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/ic_border_profile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/image_bus_driver"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintBottom_toBottomOf="@+id/view_borderDriver"
+        app:layout_constraintEnd_toEndOf="@+id/view_borderDriver"
+        app:layout_constraintStart_toStartOf="@+id/view_borderDriver"
+        app:layout_constraintTop_toTopOf="@+id/view_borderDriver"
+        android:src="@drawable/ic_default_user"
+        tools:srcCompat="@tools:sample/avatars" />
+
     <TextView
         android:id="@+id/RouteView_driver"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:text="Route of Bus :"
         android:textColor="?android:textColorPrimary"
         android:textSize="16sp"
@@ -20,7 +41,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.044"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/view_borderDriver" />
 
     <TextView
         android:id="@+id/route_bus_driver"

@@ -25,4 +25,15 @@
         tools:layout_editor_absoluteX="45dp"
         tools:layout_editor_absoluteY="0dp" />
 
+    <Switch
+        android:id="@+id/getStudentInfo_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="View \nStudent"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/backButtonStudent"
+        app:layout_constraintTop_toBottomOf="@+id/backButtonStudent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
