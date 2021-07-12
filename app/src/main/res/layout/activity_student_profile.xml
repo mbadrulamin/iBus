@@ -65,7 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="24dp"
-        android:text="Fullname"
+        android:text="Full Name"
         android:textColor="?android:textColorPrimary"
         android:textSize="20sp"
         android:textStyle="bold"
