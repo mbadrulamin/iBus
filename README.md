@@ -21,7 +21,7 @@ iBus is a comprehensive Bus Management System developed using Android Studio and
 ## Installation
 To use iBus, follow these steps:
 
-1. Clone the repository: git clone `https://github.com/your_username/ibus.git`
+1. Clone the repository: `git clone https://github.com/your_username/ibus.git`
 2. Open the project in Android Studio.
 3. Set up the Firebase project and configure the Firebase database.
 4. Add the necessary API keys for Google Maps integration.
