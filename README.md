@@ -13,7 +13,7 @@ iBus is a comprehensive Bus Management System developed using Android Studio and
 - **Distance Calculation:** iBus calculates the distance between the user and the nearest bus, providing valuable information for trip planning.
 
 ## Contributors
-- Muhamad Badrul Amin bin Mohd Tarmizi (Me)
+- Muhamad Badrul Amin bin Mohd Tarmizi
 - Muhammad Syahmi Imran bin Mohamad
 - Auni Halili binti Zamburi
 - Aufa binti Abdullah
